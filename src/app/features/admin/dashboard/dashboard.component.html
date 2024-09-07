@@ -1,0 +1,16 @@
+<div class="admin-dashboard">
+  <h1>Admin Dashboard</h1>
+
+  <!-- Popup notification -->
+  <div *ngIf="showMessage" class="notification-popup">
+    <span>{{ message }}</span>
+    <button class="close-button" (click)="closeMessage()">×</button>
+  </div>
+
+  <button routerLink="/admin/articles/search">Search Articles</button>
+  <button routerLink="/admin/articles/add">Add Article</button>
+  <button routerLink="/admin/users/search">Search Users</button>
+  <button routerLink="/admin/users/add">Add User</button>
+
+  <router-outlet></router-outlet>
+</div>

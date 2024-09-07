@@ -1,0 +1,27 @@
+<div *ngIf="article">
+    <h2>{{ article.title }}</h2>
+    <p><strong>Author:</strong> {{ article.author }}</p>
+    <p><strong>Publisher:</strong> {{ article.publisher }}</p>
+    <p><strong>Year:</strong> {{ article.yearEdition | date: 'yyyy' }}</p>
+    <p><strong>Genre:</strong> {{ article.genre }}</p>
+    <p><strong>Type:</strong> {{ article.type }}</p>
+    <p><strong>State:</strong> {{ article.state }}</p>
+  
+    <!-- Conditionally display more fields if they exist -->
+    <p *ngIf="article?.isbn"><strong>ISBN:</strong> {{ article.isbn }}</p>
+    <p *ngIf="article?.issn"><strong>ISSN:</strong> {{ article.issn }}</p>
+    <p *ngIf="article?.isan"><strong>ISAN:</strong> {{ article.isan }}</p>
+    <p *ngIf="article?.description"><strong>Description:</strong> {{ article.description }}</p>
+  
+    <button *ngIf="isAdmin" (click)="editArticle()">Modify Article</button>
+    <button *ngIf="isAdmin" (click)="deleteArticle()">Delete Article</button>
+
+    <!-- Back Button -->
+    <button (click)="goBack()">Back to Search</button>
+  </div>
+  
+  <div *ngIf="!article">
+    <p>Article not found.</p>
+    <button (click)="goBack()">Back to Search</button>
+  </div>
+  

@@ -1,0 +1,88 @@
+<div class="add-article-form">
+  <h2>Add New Article</h2>
+
+  <!-- Legend for required fields -->
+  <p class="required-legend">Fields marked with <span class="required">*</span> are mandatory.</p>
+
+  <form [formGroup]="addArticleForm" (ngSubmit)="onSubmit()">
+
+    <!-- Article Type Selection -->
+    <label for="type">Type: <span class="required">*</span></label>
+    <select id="type" formControlName="type" (change)="onTypeChange()">
+      <option *ngFor="let type of articleTypes" [value]="type">{{ type }}</option>
+    </select>
+    <div *ngIf="addArticleForm.get('type')?.invalid && addArticleForm.get('type')?.touched" class="error">
+      Type is required.
+    </div>
+
+    <label for="title">Title: <span class="required">*</span></label>
+    <input id="title" formControlName="title" type="text" />
+    <div *ngIf="addArticleForm.get('title')?.invalid && addArticleForm.get('title')?.touched" class="error">
+      Title is required.
+    </div>
+
+    <!-- Conditional Fields Based on Type -->
+    <div *ngIf="showBookFields()">
+      <label for="author">Author:</label>
+      <input id="author" formControlName="author" type="text" />
+
+      <label for="isbn">ISBN:</label>
+      <input id="isbn" formControlName="isbn" type="text" />
+    </div>
+
+    <div *ngIf="showMagazineFields()">
+      <label for="issueNumber">Issue Number:</label>
+      <input id="issueNumber" formControlName="issueNumber" type="number" />
+
+      <label for="issn">ISSN:</label>
+      <input id="issn" formControlName="issn" type="text" />
+    </div>
+
+    <div *ngIf="showMovieDvdFields()">
+      <label for="director">Director:</label>
+      <input id="director" formControlName="director" type="text" />
+
+      <label for="isan">ISAN:</label>
+      <input id="isan" formControlName="isan" type="text" />
+    </div>
+
+    <!-- Common Fields -->
+    <label for="location">Location: <span class="required">*</span></label>
+    <input id="location" formControlName="location" type="text" />
+    <div *ngIf="addArticleForm.get('location')?.invalid && addArticleForm.get('location')?.touched" class="error">
+      Location is required.
+    </div>
+
+    <label for="yearEdition">Year of Edition: <span class="required">*</span></label>
+    <input id="yearEdition" formControlName="yearEdition" type="date" />
+    <div *ngIf="addArticleForm.get('yearEdition')?.invalid && addArticleForm.get('yearEdition')?.touched" class="error">
+      Year of Edition is required and cannot be in the future.
+    </div>
+
+    <label for="publisher">Publisher: <span class="required">*</span></label>
+    <input id="publisher" formControlName="publisher" type="text" />
+    <div *ngIf="addArticleForm.get('publisher')?.invalid && addArticleForm.get('publisher')?.touched" class="error">
+      Publisher is required.
+    </div>
+
+    <label for="genre">Genre: <span class="required">*</span></label>
+    <input id="genre" formControlName="genre" type="text" />
+    <div *ngIf="addArticleForm.get('genre')?.invalid && addArticleForm.get('genre')?.touched" class="error">
+      Genre is required.
+    </div>
+
+    <label for="state">State:</label>
+    <select id="state" formControlName="state">
+      <option *ngFor="let state of articleStates" [value]="state">{{ state }}</option>
+    </select>
+
+    <label for="description">Description:</label>
+    <textarea id="description" formControlName="description"></textarea>
+
+    <!-- Submit Button -->
+    <button type="submit" [disabled]="addArticleForm.invalid">Add Article</button>
+
+    <!-- Back to Admin Dashboard Button -->
+    <button type="button" class="back-dashboard-button" routerLink="/admin">Back to Admin Dashboard</button>
+  </form>
+</div>

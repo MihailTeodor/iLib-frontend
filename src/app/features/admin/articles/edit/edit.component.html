@@ -1,0 +1,85 @@
+<div class="edit-article-form">
+  <h2>Edit Article</h2>
+
+  <!-- Legend for required fields -->
+  <p class="required-legend">Fields marked with <span class="required">*</span> are mandatory.</p>
+
+  <form [formGroup]="editArticleForm" (ngSubmit)="onSubmit()">
+
+    <label for="type">Type:</label>
+    <input id="type" formControlName="type" type="text" readonly />
+    <div *ngIf="editArticleForm.get('type')?.invalid && editArticleForm.get('type')?.touched" class="error">
+      Type is required.
+    </div>
+
+    <label for="title">Title: <span class="required">*</span></label>
+    <input id="title" formControlName="title" type="text" />
+    <div *ngIf="editArticleForm.get('title')?.invalid && editArticleForm.get('title')?.touched" class="error">
+      Title is required.
+    </div>
+
+    <!-- Conditional Fields Based on Type -->
+    <div *ngIf="showBookFields()">
+      <label for="author">Author:</label>
+      <input id="author" formControlName="author" type="text" />
+
+      <label for="isbn">ISBN:</label>
+      <input id="isbn" formControlName="isbn" type="text" />
+    </div>
+
+    <div *ngIf="showMagazineFields()">
+      <label for="issueNumber">Issue Number:</label>
+      <input id="issueNumber" formControlName="issueNumber" type="number" />
+
+      <label for="issn">ISSN:</label>
+      <input id="issn" formControlName="issn" type="text" />
+    </div>
+
+    <div *ngIf="showMovieDvdFields()">
+      <label for="director">Director:</label>
+      <input id="director" formControlName="director" type="text" />
+
+      <label for="isan">ISAN:</label>
+      <input id="isan" formControlName="isan" type="text" />
+    </div>
+
+    <!-- Common Fields -->
+    <label for="location">Location: <span class="required">*</span></label>
+    <input id="location" formControlName="location" type="text" />
+    <div *ngIf="editArticleForm.get('location')?.invalid && editArticleForm.get('location')?.touched" class="error">
+      Location is required.
+    </div>
+
+    <label for="yearEdition">Year of Edition: <span class="required">*</span></label>
+    <input id="yearEdition" formControlName="yearEdition" type="date" />
+    <div *ngIf="editArticleForm.get('yearEdition')?.invalid && editArticleForm.get('yearEdition')?.touched" class="error">
+      Year of Edition is required and cannot be in the future.
+    </div>
+
+    <label for="publisher">Publisher: <span class="required">*</span></label>
+    <input id="publisher" formControlName="publisher" type="text" />
+    <div *ngIf="editArticleForm.get('publisher')?.invalid && editArticleForm.get('publisher')?.touched" class="error">
+      Publisher is required.
+    </div>
+
+    <label for="genre">Genre: <span class="required">*</span></label>
+    <input id="genre" formControlName="genre" type="text" />
+    <div *ngIf="editArticleForm.get('genre')?.invalid && editArticleForm.get('genre')?.touched" class="error">
+      Genre is required.
+    </div>
+
+    <label for="state">State:</label>
+    <select id="state" formControlName="state">
+      <option *ngFor="let state of articleStates" [value]="state">{{ state }}</option>
+    </select>
+
+    <label for="description">Description:</label>
+    <textarea id="description" formControlName="description"></textarea>
+
+    <!-- Submit Button -->
+    <button type="submit" [disabled]="editArticleForm.invalid">Update Article</button>
+  </form>
+
+  <!-- Back Button -->
+  <button (click)="goBack()" class="back-button">Back</button>
+</div>

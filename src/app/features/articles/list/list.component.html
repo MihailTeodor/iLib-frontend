@@ -1,0 +1,40 @@
+<div *ngIf="articles.length > 0">
+    <h3>Search Results ({{ totalResults }} results)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Publisher</th>
+          <th>Year</th>
+          <th>Type</th>
+          <th>State</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let article of articles" (click)="onSelectArticle(article)">
+          <td>{{ article.title }}</td>
+          <td>{{ article.author }}</td>
+          <td>{{ article.publisher }}</td>
+          <td>{{ article.yearEdition | date: 'yyyy' }}</td>
+          <td>{{ article.type }}</td>
+          <td>{{ article.state }}</td>
+          <td>
+            <button (click)="onSelectArticle(article)">Details</button>
+            <button *ngIf="canPerformAction(article, 'book')" (click)="bookArticle(article)">Book</button>
+            <button *ngIf="canPerformAction(article, 'unbook')" (click)="unbookArticle(article)">Unbook</button>
+            <button *ngIf="isAdmin" (click)="modifyArticle(article)">Modify</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Pagination Controls -->
+    <div class="pagination-controls" *ngIf="totalPages > 1">
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+    </div>
+  </div>
+  
