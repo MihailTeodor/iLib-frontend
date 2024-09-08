@@ -1,0 +1,143 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  
+    thead {
+      background-color: #28a745;
+      color: white;
+  
+      th {
+        padding: 10px;
+        text-align: left;
+        font-weight: bold;
+      }
+    }
+  
+    tbody {
+      tr {
+        transition: background-color 0.3s;
+  
+        &:hover {
+          background-color: #f1f1f1;
+        }
+  
+        td {
+          padding: 10px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+        }
+  
+        button {
+          padding: 5px 10px;
+          background-color: #28a745;
+          border: none;
+          color: white;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+  
+          &:hover {
+            background-color: #218838;
+          }
+  
+          &:disabled {
+            background-color: #bbb;
+            cursor: not-allowed;
+          }
+  
+          &:not(:last-child) {
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+  }
+  
+  .pagination-controls {
+    text-align: center;
+    margin-top: 20px;
+  
+    button {
+      padding: 10px 20px;
+      background-color: #28a745;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin: 0 5px;
+  
+      &:hover {
+        background-color: #218838;
+      }
+  
+      &:disabled {
+        background-color: #bbb;
+        cursor: not-allowed;
+      }
+    }
+  
+    span {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+  
+  h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  td,
+  th {
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 768px) {
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      display: block;
+    }
+  
+    thead {
+      display: none;
+    }
+  
+    tr {
+      margin-bottom: 15px;
+      background-color: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 8px;
+    }
+  
+    td {
+      text-align: right;
+      padding-left: 50%;
+      position: relative;
+  
+      &:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: 15px;
+        font-weight: bold;
+        text-align: left;
+      }
+    }
+  
+    .pagination-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  

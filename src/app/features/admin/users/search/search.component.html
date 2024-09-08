@@ -1,1 +1,41 @@
-<p>search works!</p>
+<div class="search-users-form">
+  <h2>Search Users</h2>
+
+  <button (click)="toggleForm()">
+    <span *ngIf="formCollapsed">▼ Show Search</span>
+    <span *ngIf="!formCollapsed">▲ Hide Search</span>
+  </button>
+
+  <form *ngIf="!formCollapsed" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <label for="name">Name:</label>
+    <input id="name" formControlName="name" type="text" />
+
+    <label for="surname">Surname:</label>
+    <input id="surname" formControlName="surname" type="text" />
+
+    <label for="email">Email:</label>
+    <input id="email" formControlName="email" type="email" />
+
+    <label for="telephoneNumber">Telephone Number:</label>
+    <input id="telephoneNumber" formControlName="telephoneNumber" type="text" />
+
+    <button type="submit">Search</button>
+  </form>
+
+  <label for="resultsPerPage">Results Per Page:</label>
+  <select id="resultsPerPage" formControlName="resultsPerPage" (change)="onResultsPerPageChange()">
+    <option *ngFor="let option of resultsPerPageOptions" [value]="option">{{ option }}</option>
+  </select>
+
+  <app-user-list [users]="users" 
+                 [totalResults]="totalResults"
+                 [totalPages]="totalPages"
+                 [currentPage]="currentPage"
+                 [searchFormData]="searchForm.value"
+                 (pageChange)="goToPage($event)">
+  </app-user-list>
+
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <button routerLink="/admin" class="back-dashboard-button">Back to Admin Dashboard</button>
+</div>
