@@ -5,9 +5,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddArticleComponent } from './articles/add/add.component';
 import { EditArticleComponent } from './articles/edit/edit.component';
+import { RegisterUserComponent } from './users/register/register.component';
 
 @NgModule({
-  declarations: [DashboardComponent, AddArticleComponent, EditArticleComponent],
+  declarations: [DashboardComponent, AddArticleComponent, EditArticleComponent, RegisterUserComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,
