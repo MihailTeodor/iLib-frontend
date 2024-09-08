@@ -1,0 +1,47 @@
+<div class="register-user-form">
+    <h2>Register New User</h2>
+  
+    <!-- Legend for required fields -->
+    <p class="required-legend">Fields marked with <span class="required">*</span> are mandatory.</p>
+  
+    <form [formGroup]="registerUserForm" (ngSubmit)="onSubmit()">
+      <label for="email">Email: <span class="required">*</span></label>
+      <input id="email" formControlName="email" type="email" />
+      <div *ngIf="registerUserForm.get('email')?.invalid && registerUserForm.get('email')?.touched" class="error">
+        Email is required and must be a valid email.
+      </div>
+  
+      <label for="plainPassword">Password: <span class="required">*</span></label>
+      <input id="plainPassword" formControlName="plainPassword" type="password" />
+      <div *ngIf="registerUserForm.get('plainPassword')?.invalid && registerUserForm.get('plainPassword')?.touched" class="error">
+        Password is required.
+      </div>
+  
+      <label for="name">Name: <span class="required">*</span></label>
+      <input id="name" formControlName="name" type="text" />
+      <div *ngIf="registerUserForm.get('name')?.invalid && registerUserForm.get('name')?.touched" class="error">
+        Name is required.
+      </div>
+  
+      <label for="surname">Surname: <span class="required">*</span></label>
+      <input id="surname" formControlName="surname" type="text" />
+      <div *ngIf="registerUserForm.get('surname')?.invalid && registerUserForm.get('surname')?.touched" class="error">
+        Surname is required.
+      </div>
+  
+      <label for="address">Address:</label>
+      <input id="address" formControlName="address" type="text" />
+  
+      <label for="telephoneNumber">Telephone Number: <span class="required">*</span></label>
+      <input id="telephoneNumber" formControlName="telephoneNumber" type="text" />
+      <div *ngIf="registerUserForm.get('telephoneNumber')?.invalid && registerUserForm.get('telephoneNumber')?.touched" class="error">
+        Telephone number is required and must be exactly 10 digits.
+      </div>
+  
+      <button type="submit" [disabled]="registerUserForm.invalid">Register User</button>
+  
+      <!-- Back to Admin Dashboard Button -->
+      <button type="button" class="back-dashboard-button" routerLink="/admin">Back to Admin Dashboard</button>
+    </form>
+  </div>
+  

@@ -5,8 +5,8 @@ import { SearchArticlesComponent } from '../articles/search/search.component';
 import { AddArticleComponent } from './articles/add/add.component';
 import { EditArticleComponent } from './articles/edit/edit.component';
 import { SearchUsersComponent } from './users/search/search.component';
-import { AddUserComponent } from './users/add/add.component';
 import { AuthGuard } from '../../core/guards/auth.guard';
+import { RegisterUserComponent } from './users/register/register.component';
 
 
 const routes: Routes = [
@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'articles/add', component: AddArticleComponent, canActivate: [AuthGuard], data: { role: 'ADMINISTRATOR' } },
   { path: 'articles/edit/:id', component: EditArticleComponent, canActivate: [AuthGuard], data: { role: 'ADMINISTRATOR' } },
   { path: 'users/search', component: SearchUsersComponent },
-  { path: 'users/add', component: AddUserComponent, canActivate: [AuthGuard], data: { role: 'ADMINISTRATOR' } },
+  { path: 'users/register', component: RegisterUserComponent, canActivate: [AuthGuard], data: { role: 'ADMINISTRATOR' } }
 ];
 
 @NgModule({
