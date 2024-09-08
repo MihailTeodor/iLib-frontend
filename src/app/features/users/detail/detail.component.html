@@ -1,1 +1,18 @@
-<p>detail works!</p>
+<div *ngIf="user">
+    <h2>{{ user.name }} {{ user.surname }}</h2>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Telephone Number:</strong> {{ user.telephoneNumber }}</p>
+    <p *ngIf="user?.address"><strong>Address:</strong> {{ user.address }}</p>
+  
+    <!-- Conditionally display the Modify and Delete buttons for admins -->
+    <button *ngIf="isAdmin" (click)="editUser()">Modify User</button>
+  
+    <!-- Back Button -->
+    <button (click)="goBack()">Back to Search</button>
+  </div>
+  
+  <div *ngIf="!user">
+    <p>User not found.</p>
+    <button (click)="goBack()">Back to Search</button>
+  </div>
+  

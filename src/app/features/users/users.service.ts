@@ -37,4 +37,5 @@ export class UsersService {
 
     return this.http.get(`${this.apiUrl}`, { headers, params });
   }
+
 }
