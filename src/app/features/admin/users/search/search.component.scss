@@ -112,6 +112,35 @@
       background-color: #5a6268;
     }
   }
+
+  button.toggle-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+    
+    &:hover {
+      background-color: #0056b3;
     }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 4px rgba(0, 123, 255, 0.6);
+    }
+
+    /* Adding the arrow span for better visual clarity */
+    span {
+      margin-left: 8px;
+    }
+  }
+}
     
   

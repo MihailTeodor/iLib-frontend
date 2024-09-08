@@ -1,11 +1,12 @@
 <div class="search-articles-form">
   <h2>Search Articles</h2>
 
-  <!-- Toggle button to collapse/expand the search form -->
-  <button (click)="toggleForm()">
-    <span *ngIf="formCollapsed">▼ Show Search</span>
-    <span *ngIf="!formCollapsed">▲ Hide Search</span>
-  </button>
+ <!-- Toggle button to collapse/expand the search form -->
+<button class="toggle-button" (click)="toggleForm()">
+  <span *ngIf="formCollapsed">▼ Show Search</span>
+  <span *ngIf="!formCollapsed">▲ Hide Search</span>
+</button>
+
 
   <!-- Collapsible form -->
   <form *ngIf="!formCollapsed" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
