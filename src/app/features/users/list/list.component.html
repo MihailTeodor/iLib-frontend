@@ -1,1 +1,32 @@
-<p>list works!</p>
+<div *ngIf="users.length > 0">
+    <h3>Search Results ({{ totalResults }} results)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Surname</th>
+          <th>Email</th>
+          <th>Telephone Number</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users" (click)="onSelectUser(user)">
+          <td>{{ user.name }}</td>
+          <td>{{ user.surname }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.telephoneNumber }}</td>
+          <td>
+            <button (click)="onSelectUser(user)">Details</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div class="pagination-controls" *ngIf="totalPages > 1">
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+    </div>
+  </div>
+  
