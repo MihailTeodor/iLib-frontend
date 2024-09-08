@@ -8,9 +8,10 @@ import { EditArticleComponent } from './articles/edit/edit.component';
 import { RegisterUserComponent } from './users/register/register.component';
 import { SearchUsersComponent } from './users/search/search.component';
 import { UsersModule } from '../../features/users/users.module';
+import { EditUserComponent } from './users/edit/edit.component';
 
 @NgModule({
-  declarations: [DashboardComponent, AddArticleComponent, EditArticleComponent, RegisterUserComponent, SearchUsersComponent],
+  declarations: [DashboardComponent, AddArticleComponent, EditArticleComponent, RegisterUserComponent, SearchUsersComponent, EditUserComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,

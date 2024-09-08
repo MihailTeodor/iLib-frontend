@@ -38,4 +38,13 @@ export class UsersService {
     return this.http.get(`${this.apiUrl}`, { headers, params });
   }
 
+  updateUser(user: UserDTO): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put(`${this.apiUrl}/${user.id}`, user, { headers });
+  }
 }
