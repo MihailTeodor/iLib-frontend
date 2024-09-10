@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.prod';
 import { UserDTO } from '../../shared/models/user.dto';
+import { UserDashboardDTO } from '../../shared/models/user-dashboard.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +47,13 @@ export class UsersService {
     });
 
     return this.http.put(`${this.apiUrl}/${user.id}`, user, { headers });
+  }
+
+  getUserInfo(userId: string): Observable<UserDashboardDTO> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<UserDashboardDTO>(`${this.apiUrl}/${userId}`, { headers });
   }
 }

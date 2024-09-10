@@ -1,0 +1,57 @@
+.app-header {
+    background-color: #007bff; // Same blue background color
+    color: white;
+    padding: 10px 15px; // Slimmer padding for a more compact header
+    display: flex;
+    justify-content: space-between; // To align elements properly
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Subtle shadow
+  
+    .header-title {
+      font-size: 1.5rem; // Optional: Can be removed if no title is needed
+      margin: 0;
+    }
+  
+    .header-buttons {
+      display: flex;
+  
+      button {
+        padding: 8px 15px; // Slimmer padding for buttons
+        background-color: white; // White button background
+        color: #007bff; // Blue text color
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem; // Slightly smaller text
+        transition: background-color 0.3s, transform 0.2s;
+  
+        &:hover {
+          background-color: #f1f1f1;
+          transform: translateY(-1px);
+        }
+  
+        &:active {
+          transform: translateY(0);
+        }
+  
+        &:not(:last-child) {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+  
+  // Responsive design for smaller screens
+  @media (max-width: 768px) {
+    .app-header {
+      padding: 8px 10px; // Reduce padding further for small screens
+  
+      .header-buttons {
+        button {
+          padding: 6px 12px;
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+  
