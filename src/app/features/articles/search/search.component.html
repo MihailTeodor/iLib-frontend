@@ -40,14 +40,15 @@
     <label for="director">Director:</label>
     <input id="director" formControlName="director" type="text" />
 
+    <!-- Dropdown to select results per page -->
+    <label for="resultsPerPage">Results Per Page:</label>
+    <select id="resultsPerPage" formControlName="resultsPerPage" (change)="onResultsPerPageChange()">
+      <option *ngFor="let option of resultsPerPageOptions" [value]="option">{{ option }}</option>
+    </select>
+
     <button type="submit">Search</button>
   </form>
 
-  <!-- Dropdown to select results per page -->
-  <label for="resultsPerPage">Results Per Page:</label>
-  <select id="resultsPerPage" formControlName="resultsPerPage" (change)="onResultsPerPageChange()">
-    <option *ngFor="let option of resultsPerPageOptions" [value]="option">{{ option }}</option>
-  </select>
 
   <!-- Display the ArticleListComponent -->
   <app-article-list [articles]="articles" 
@@ -60,7 +61,4 @@
 
   <!-- Error Message -->
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-
-  <!-- Back to Admin Dashboard Button -->
-  <button routerLink="/admin" class="back-dashboard-button">Back to Admin Dashboard</button>
 </div>

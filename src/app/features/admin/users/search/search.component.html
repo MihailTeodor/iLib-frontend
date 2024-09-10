@@ -19,14 +19,15 @@
 
     <label for="telephoneNumber">Telephone Number:</label>
     <input id="telephoneNumber" formControlName="telephoneNumber" type="text" />
+    
+    <label for="resultsPerPage">Results Per Page:</label>
+    <select id="resultsPerPage" formControlName="resultsPerPage" (change)="onResultsPerPageChange()">
+      <option *ngFor="let option of resultsPerPageOptions" [value]="option">{{ option }}</option>
+    </select>
 
     <button type="submit">Search</button>
   </form>
 
-  <label for="resultsPerPage">Results Per Page:</label>
-  <select id="resultsPerPage" formControlName="resultsPerPage" (change)="onResultsPerPageChange()">
-    <option *ngFor="let option of resultsPerPageOptions" [value]="option">{{ option }}</option>
-  </select>
 
   <app-user-list [users]="users" 
                  [totalResults]="totalResults"
@@ -37,6 +38,4 @@
   </app-user-list>
 
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-
-  <button routerLink="/admin" class="back-dashboard-button">Back to Admin Dashboard</button>
 </div>
