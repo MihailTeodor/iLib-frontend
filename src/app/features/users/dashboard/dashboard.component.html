@@ -1,34 +1,53 @@
 <div class="user-dashboard" *ngIf="userInfo">
-    <h1>Welcome, {{ userInfo.name }} {{ userInfo.surname }}</h1>
-  
-    <div class="user-details">
-      <p><strong>Email:</strong> {{ userInfo.email }}</p>
-      <p><strong>Telephone Number:</strong> {{ userInfo.telephoneNumber }}</p>
-      <p *ngIf="userInfo.address"><strong>Address:</strong> {{ userInfo.address }}</p>
-    </div>
-  
-    <div *ngIf="userInfo.loans && userInfo.loans.length > 0">
-      <h2>Your Loans</h2>
-      <ul>
-        <li *ngFor="let loan of userInfo.loans">
-          <strong>{{ loan.articleTitle }}</strong> - Due on {{ loan.dueDate | date }}
-        </li>
-      </ul>
-    </div>
-  
-    <div *ngIf="userInfo.bookings && userInfo.bookings.length > 0">
-      <h2>Your Bookings</h2>
-      <ul>
-        <li *ngFor="let booking of userInfo.bookings">
-          <strong>{{ booking.bookedArticleTitle }}</strong> - Reserved until {{ booking.bookingEndDate | date }}
-        </li>
-      </ul>
-    </div>
-  
-    <button (click)="searchArticles()">Search Articles</button>
+  <h1>Welcome, {{ userInfo.name }} {{ userInfo.surname }}</h1>
+
+  <div class="user-details">
+    <p><strong>Email:</strong> {{ userInfo.email }}</p>
+    <p><strong>Telephone Number:</strong> {{ userInfo.telephoneNumber }}</p>
+    <p *ngIf="userInfo.address"><strong>Address:</strong> {{ userInfo.address }}</p>
   </div>
-  
-  <div *ngIf="errorMessage">
-    <p class="error">{{ errorMessage }}</p>
+
+  <div *ngIf="userInfo.loans && userInfo.loans.length > 0">
+    <h2>Your Loans</h2>
+    <ul>
+      <li *ngFor="let loan of userInfo.loans">
+        <strong>{{ loan.articleTitle }}</strong> - Due on {{ loan.dueDate | date }}
+      </li>
+    </ul>
   </div>
-  
+
+  <div *ngIf="userInfo.bookings && userInfo.bookings.length > 0">
+    <h2>Your Bookings</h2>
+    <ul>
+      <li *ngFor="let booking of bookings">
+        <button class="booking-button" (click)="goToArticleDetails(booking.bookedArticleId)">
+          <strong>{{ booking.bookedArticleTitle }}</strong>
+        </button>  
+        <span *ngIf="isBookingActive(booking)">
+          Reserved until {{ booking.bookingEndDate | date }} (Active)
+        </span>
+        <span *ngIf="!isBookingActive(booking)">
+          {{ booking.state }}
+        </span>
+      </li>
+    </ul>
+
+   <!-- Pagination controls for booking history -->
+   <div class="pagination-controls" *ngIf="showAllBookings && totalPages > 1">
+    <button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+  </div>
+</div>
+
+<!-- Show/Hide button for booking history -->
+<button (click)="toggleBookingHistory()">
+  {{ showAllBookings ? 'Hide History' : 'Show History' }}
+</button>
+
+<button (click)="searchArticles()">Search Articles</button>
+</div>
+
+<div *ngIf="errorMessage">
+<p class="error">{{ errorMessage }}</p>
+</div>

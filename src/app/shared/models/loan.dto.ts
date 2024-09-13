@@ -1,8 +1,8 @@
 export interface LoanDTO {
-    id?: number;
-    articleId: number;
+    id?: string;
+    articleId: string;
     articleTitle: string;
-    loaningUserId: number;
+    loaningUserId: string;
     loanDate: Date;
     dueDate: Date;
     renewed: boolean;

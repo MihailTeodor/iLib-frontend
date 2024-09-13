@@ -18,7 +18,7 @@ export class DashboardComponent {
 
       setTimeout(() => {
         this.showMessage = false;
-      }, 5000);
+      }, 3000);
     }
   }
 

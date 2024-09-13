@@ -2,7 +2,7 @@ import { BookingDTO } from './booking.dto';
 import { LoanDTO } from './loan.dto';
 
 export interface UserDashboardDTO {
-  id: number;
+  id: string;
   name: string;
   surname: string;
   email: string;
