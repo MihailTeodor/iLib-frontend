@@ -34,13 +34,12 @@ export class UserDashboardComponent implements OnInit {
     this.loadUserDashboard(userId!);
   }
 
-  // Load basic user info and 5 latest bookings
   loadUserDashboard(userId: string): void {
     this.usersService.getUserInfo(userId).subscribe({
       next: (data) => {
         this.userInfo = data;
-        this.bookings = data.bookings;  // Use the 5 initial bookings
-        this.totalResults = data.bookings.length;  // Default to the initial count
+        this.bookings = data.bookings;  
+        this.totalResults = data.bookings.length;
       },
       error: (error) => {
         this.errorMessage = 'An error occurred while fetching your information.';
@@ -65,11 +64,9 @@ export class UserDashboardComponent implements OnInit {
 
   toggleBookingHistory(): void {
     if (this.showAllBookings) {
-      // Reset to the latest bookings and reset page number
       this.currentPage = 1;
       this.bookings = this.userInfo?.bookings || [];
     } else {
-      // Load full booking history starting from page 1
       this.loadBookingHistory(1);
     }
     this.showAllBookings = !this.showAllBookings;

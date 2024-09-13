@@ -30,7 +30,7 @@ export class AuthService {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userId');
     localStorage.removeItem('userRole');
-    this.router.navigate(['/auth/login']);
+    this.router.navigate(['/auth/login']);  
   }
 
   isAuthenticated(): boolean {

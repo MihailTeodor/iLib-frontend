@@ -7,23 +7,22 @@ import { Router } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
-  isAdmin: boolean = false;
+export class HeaderComponent {
 
   constructor(
     private authService: AuthService,
     private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.isAdmin = this.authService.getUserRole() === 'ADMINISTRATOR';
+  isUserAdmin(): boolean {
+    return this.authService.getUserRole() === 'ADMINISTRATOR';
   }
 
   goHome(): void {
-    if (this.isAdmin) {
-      this.router.navigate(['/admin']);
-    } else {
-      this.router.navigate(['/users']);
-    }
+    this.isUserAdmin() ? this.router.navigate(['/admin']) : this.router.navigate(['/users']);
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }
