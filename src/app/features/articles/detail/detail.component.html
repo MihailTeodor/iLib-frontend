@@ -13,14 +13,20 @@
   <p *ngIf="article?.isan"><strong>ISAN:</strong> {{ article.isan }}</p>
   <p *ngIf="article?.description"><strong>Description:</strong> {{ article.description }}</p>
 
+  <button *ngIf="canBookArticle()" (click)="bookArticle()">Book Article</button>
+  <button *ngIf="isArticleBookedByCurrentUser()" (click)="cancelBooking()">Cancel Booking</button>
+
+
   <button *ngIf="isAdmin" (click)="editArticle()">Modify Article</button>
   <button *ngIf="isAdmin" (click)="deleteArticle()">Delete Article</button>
 
   <!-- Back Button -->
-  <button (click)="goBack()" class="back-button">Back to Search</button>
+  <button (click)="goBack()" class="back-button">{{ buttonText }}</button>
 </div>
 
 <div class="article-details" *ngIf="!article">
   <p>Article not found.</p>
   <button (click)="goBack()" class="back-button">Back to Search</button>
 </div>
+
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>

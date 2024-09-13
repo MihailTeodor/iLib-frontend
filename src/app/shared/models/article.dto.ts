@@ -1,5 +1,5 @@
 export interface ArticleDTO {
-    id?: number;
+    id?: string;
     type: ArticleType;
     location: string;
     title: string;

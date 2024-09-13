@@ -25,7 +25,7 @@ export class ArticleListComponent {
   }
 
   onSelectArticle(article: ArticleDTO): void {
-    this.router.navigate(['/articles/details', article.id], { state: { article, searchFormData: this.searchFormData, articles: this.articles } });
+    this.router.navigate(['/articles/details', article.id], { state: { article, searchFormData: this.searchFormData, articles: this.articles, fromSearch: true, } });
   }
 
   canPerformAction(article: ArticleDTO, action: string): boolean {

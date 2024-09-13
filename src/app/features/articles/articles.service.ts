@@ -25,6 +25,15 @@ export class ArticlesService {
     return this.http.post(`${this.apiUrl}`, article, { headers });
   }
 
+  getArticleById(articleId: string): Observable<ArticleDTO> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  
+    return this.http.get<ArticleDTO>(`${this.apiUrl}/${articleId}`, { headers });
+  }
+  
   searchArticles(searchParams: any): Observable<any> {
     const token = localStorage.getItem('authToken');
     const headers = new HttpHeaders({
@@ -51,7 +60,7 @@ export class ArticlesService {
     return this.http.put(`${this.apiUrl}/${article.id}`, article, { headers });
   }
   
-  deleteArticle(articleId: number): Observable<any> {
+  deleteArticle(articleId: string): Observable<any> {
     const token = localStorage.getItem('authToken');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -59,4 +68,21 @@ export class ArticlesService {
 
     return this.http.delete(`${this.apiUrl}/${articleId}`, { headers });
   }
+
+  bookArticle(userId: string, articleId: string): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  
+    // Append the userId and articleId as query parameters
+    let params = new HttpParams();
+    params = params.append('userId', userId.toString());
+    params = params.append('articleId', articleId.toString());
+  
+    // Sending the POST request to register a booking
+    return this.http.post(`${this.apiUrl}`, null, { headers, params });
+  }
+  
 }

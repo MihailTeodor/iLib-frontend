@@ -1,8 +1,8 @@
 export interface BookingDTO {
-    id?: number;
-    bookedArticleId: number;
+    id?: string;
+    bookedArticleId: string;
     bookedArticleTitle?: string;
-    bookingUserId: number;
+    bookingUserId: string;
     bookingDate: Date;
     bookingEndDate: Date;
     state: BookingState;
