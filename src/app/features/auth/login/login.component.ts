@@ -29,9 +29,9 @@ export class LoginComponent {
         next: (response) => {
           const userRole = response.role;
           if (userRole === 'ADMINISTRATOR') {
-            this.router.navigate(['/admin']);  // Redirect admins to admin dashboard
+            this.router.navigate(['/admin']);
           } else {
-            this.router.navigate(['/users']);  // Redirect regular users to user dashboard
+            this.router.navigate(['/users']);
           }
         },
         error: (error) => {
