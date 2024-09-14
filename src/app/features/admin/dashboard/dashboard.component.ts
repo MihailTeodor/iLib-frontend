@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class DashboardComponent {
   message: string | null = null;
-  showMessage: boolean = false; // Control visibility of the message
+  showMessage: boolean = false;
 
   constructor() { }
 
@@ -18,7 +18,7 @@ export class DashboardComponent {
 
       setTimeout(() => {
         this.showMessage = false;
-      }, 3000);
+      }, 1000);
     }
   }
 
