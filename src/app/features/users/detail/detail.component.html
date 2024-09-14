@@ -4,10 +4,9 @@
   <p><strong>Telephone Number:</strong> {{ user.telephoneNumber }}</p>
   <p *ngIf="user?.address"><strong>Address:</strong> {{ user.address }}</p>
 
-  <!-- Conditionally display the Modify button for admins -->
   <button *ngIf="isAdmin" (click)="editUser()">Modify User</button>
+  <button *ngIf="isAdmin" (click)="goToUserDashboard()">User Dashboard</button>
 
-  <!-- Back Button -->
   <button (click)="goBack()" class="back-button">Back to Search</button>
 </div>
 

@@ -10,4 +10,6 @@ export interface UserDashboardDTO {
   telephoneNumber: string;
   loans: LoanDTO[];
   bookings: BookingDTO[];
+  totalBookings: number;
+  totalLoans: number;
 }

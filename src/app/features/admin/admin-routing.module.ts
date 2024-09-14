@@ -8,6 +8,7 @@ import { AuthGuard } from '../../core/guards/auth.guard';
 import { RegisterUserComponent } from './users/register/register.component';
 import { SearchUsersComponent } from './users/search/search.component';
 import { EditUserComponent } from './users/edit/edit.component';
+import { UserDashboardComponent } from '../users/dashboard/dashboard.component';
 
 
 const routes: Routes = [
@@ -18,7 +19,7 @@ const routes: Routes = [
   { path: 'users/register', component: RegisterUserComponent, canActivate: [AuthGuard], data: { role: 'ADMINISTRATOR' } },
   { path: 'users/search', component: SearchUsersComponent, canActivate: [AuthGuard], data: { role: 'ADMINISTRATOR' } },
   { path: 'users/edit/:id', component: EditUserComponent, canActivate: [AuthGuard], data: { role: 'ADMINISTRATOR' } },
-
+  { path: 'dashboard/:id', component: UserDashboardComponent, canActivate: [AuthGuard], data: { role: 'ADMINISTRATOR' } },
 ];
 
 @NgModule({
