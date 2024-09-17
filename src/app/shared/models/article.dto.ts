@@ -1,3 +1,6 @@
+import { BookingDTO } from "./booking.dto";
+import { LoanDTO } from "./loan.dto";
+
 export interface ArticleDTO {
     id?: string;
     type: ArticleType;
@@ -14,8 +17,8 @@ export interface ArticleDTO {
     issn?: string;
     director?: string;
     isan?: string;
-    loanDueDate?: Date;
-    bookingEndDate?: Date;
+    loanDTO?: LoanDTO;
+    bookingDTO?:BookingDTO;
   }
   
   export enum ArticleState {

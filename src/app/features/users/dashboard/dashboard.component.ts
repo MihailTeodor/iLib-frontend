@@ -89,7 +89,13 @@ export class UserDashboardComponent implements OnInit {
   }
 
   searchArticles(): void {
-    this.router.navigate(['/articles/search']);
+    if (this.authService.getUserRole() === 'ADMINISTRATOR') {
+      this.router.navigate(['/articles/search'], { state: { fromUserDashboard: true, userId: this.userInfo?.id } });
+    } else {
+      this.router.navigate(['/articles/search'], { state: { fromUserDashboard: true } });
+    }
+
+
   }
 
   isBookingActive(booking: BookingDTO): boolean {

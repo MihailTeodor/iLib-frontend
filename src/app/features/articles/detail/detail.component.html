@@ -5,23 +5,56 @@
   <p><strong>Year:</strong> {{ article.yearEdition | date: 'yyyy' }}</p>
   <p><strong>Genre:</strong> {{ article.genre }}</p>
   <p><strong>Type:</strong> {{ article.type }}</p>
-  <p><strong>State:</strong> {{ article.state }}</p>
+  <p *ngIf="article?.state === 'BOOKED'"><strong>State: {{ article.state }}</strong> until {{ article.bookingDTO?.bookingEndDate | date }}</p>
+  <p *ngIf="article?.state === 'ONLOAN'"><strong>State: {{ article.state }}</strong> until {{ article.loanDTO?.dueDate | date }}</p>
+  <p *ngIf="article?.state === 'ONLOANBOOKED'"><strong>State: ONLOAN</strong> until {{ article.loanDTO?.dueDate | date }} and BOOKED until {{ article.bookingDTO?.bookingEndDate | date }}</p>
+  <p *ngIf="article?.state === 'AVAILABLE'"><strong>State: {{ article.state }}</strong></p>
+  <p *ngIf="article?.state === 'UNAVAILABLE'"><strong>State: {{ article.state }}</strong></p>
 
-  <!-- Conditionally display more fields if they exist -->
   <p *ngIf="article?.isbn"><strong>ISBN:</strong> {{ article.isbn }}</p>
   <p *ngIf="article?.issn"><strong>ISSN:</strong> {{ article.issn }}</p>
   <p *ngIf="article?.isan"><strong>ISAN:</strong> {{ article.isan }}</p>
   <p *ngIf="article?.description"><strong>Description:</strong> {{ article.description }}</p>
 
   <button *ngIf="canBookArticle()" (click)="bookArticle()">Book Article</button>
-  <button *ngIf="isArticleBookedByCurrentUser()" (click)="cancelBooking()">Cancel Booking</button>
-
+  <button *ngIf="isArticleBookedByCurrentUser() || (isAdmin && isArticleBooked())" (click)="cancelBooking()">Cancel Booking</button>
 
   <button *ngIf="isAdmin" (click)="editArticle()">Modify Article</button>
   <button *ngIf="isAdmin" (click)="deleteArticle()">Delete Article</button>
 
-  <!-- Back Button -->
   <button (click)="goBack()" class="back-button">{{ buttonText }}</button>
+
+  <div *ngIf="isAdmin && isUserSelected" class="selected-user-section">
+    <h3>Selected User</h3>
+    <div class="user-info">
+      <div class="user-details">
+        <p><strong>Name:</strong> {{ selectedUser!.name }}</p>
+        <p><strong>Email:</strong> {{ selectedUser!.email }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isAdmin && (article.state === 'BOOKED' || article.state === 'ONLOANBOOKED')" class="booking-user-section">
+    <h3>Booking User</h3>
+    <div class="user-info">
+      <div class="user-details">
+        <p *ngIf="bookingUser"><strong>Name:</strong> {{ bookingUser.name }}</p>
+        <p *ngIf="bookingUser"><strong>Email:</strong> {{ bookingUser.email }}</p>
+      </div>
+      <button *ngIf="bookingUser" (click)="goToUserDashboard(bookingUser!.id)" class="dashboard-button">Go to Dashboard</button>
+    </div>
+  </div>
+
+  <div *ngIf="isAdmin && (article.state === 'ONLOAN' || article.state === 'ONLOANBOOKED')" class="loaning-user-section">
+    <h3>Loaning User</h3>
+    <div class="user-info">
+      <div class="user-details">
+        <p *ngIf="loaningUser"><strong>Name:</strong> {{ loaningUser.name }}</p>
+        <p *ngIf="loaningUser"><strong>Email:</strong> {{ loaningUser.email }}</p>
+      </div>
+      <button *ngIf="loaningUser" (click)="goToUserDashboard(loaningUser!.id)" class="dashboard-button">Go to Dashboard</button>
+    </div>
+  </div>
 </div>
 
 <div class="article-details" *ngIf="!article">
