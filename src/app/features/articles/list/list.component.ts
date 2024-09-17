@@ -25,24 +25,8 @@ export class ArticleListComponent {
   }
 
   onSelectArticle(article: ArticleDTO): void {
-    this.router.navigate(['/articles/details', article.id], { state: { article, searchFormData: this.searchFormData, articles: this.articles, fromSearch: true, } });
-  }
-
-  canPerformAction(article: ArticleDTO, action: string): boolean {
-    // Define logic to enable/disable buttons based on article state and user role
-    return this.isAdmin; // Example logic for admin
-  }
-
-  modifyArticle(article: ArticleDTO): void {
-    // Perform actions on modifying an article, such as navigation to edit article page
-  }
-
-  bookArticle(article: ArticleDTO): void {
-    // Perform actions on booking an article, such as navigation to book article page
-  }
-
-  unbookArticle(article: ArticleDTO): void {
-    // Perform actions on unbooking an article, such as navigation to unbook article page
+    const userId = history.state.userId;
+    this.router.navigate(['/articles/details', article.id], { state: { article, searchFormData: this.searchFormData, articles: this.articles, fromSearch: true, userId} });
   }
 
   goToPage(page: number): void {

@@ -19,8 +19,16 @@ export class UserListComponent {
   constructor(private router: Router) { }
 
   onSelectUser(user: UserDTO): void {
-    this.router.navigate(['/users/detail', user.id], { state: { user, searchFormData: this.searchFormData, users: this.users } });
+    if (history.state.fromArticleBooking) {
+      const articleId = history.state.articleId;
+      if (articleId) {
+        this.router.navigate(['/articles/details', articleId], { state: { userId: user.id, fromUserBooking: true, searchFormData: this.searchFormData, users: this.users } });
+      }
+    } else {
+      this.router.navigate(['/users/detail', user.id], { state: { user, searchFormData: this.searchFormData, users: this.users } });
+    }
   }
+  
 
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {

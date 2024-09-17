@@ -22,9 +22,6 @@
           <td>{{ article.state }}</td>
           <td>
             <button (click)="onSelectArticle(article)">Details</button>
-            <button *ngIf="canPerformAction(article, 'book')" (click)="bookArticle(article)">Book</button>
-            <button *ngIf="canPerformAction(article, 'unbook')" (click)="unbookArticle(article)">Unbook</button>
-            <button *ngIf="isAdmin" (click)="modifyArticle(article)">Modify</button>
           </td>
         </tr>
       </tbody>
