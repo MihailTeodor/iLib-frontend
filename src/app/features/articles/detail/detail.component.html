@@ -7,7 +7,7 @@
   <p><strong>Type:</strong> {{ article.type }}</p>
   <p *ngIf="article?.state === 'BOOKED'"><strong>State: {{ article.state }}</strong> until {{ article.bookingDTO?.bookingEndDate | date }}</p>
   <p *ngIf="article?.state === 'ONLOAN'"><strong>State: {{ article.state }}</strong> until {{ article.loanDTO?.dueDate | date }}</p>
-  <p *ngIf="article?.state === 'ONLOANBOOKED'"><strong>State: ONLOAN</strong> until {{ article.loanDTO?.dueDate | date }} and BOOKED until {{ article.bookingDTO?.bookingEndDate | date }}</p>
+  <p *ngIf="article?.state === 'ONLOANBOOKED'"><strong>State: ONLOAN</strong> until {{ article.loanDTO?.dueDate | date }} and <strong>BOOKED</strong> until {{ article.bookingDTO?.bookingEndDate | date }}</p>
   <p *ngIf="article?.state === 'AVAILABLE'"><strong>State: {{ article.state }}</strong></p>
   <p *ngIf="article?.state === 'UNAVAILABLE'"><strong>State: {{ article.state }}</strong></p>
 
@@ -16,8 +16,12 @@
   <p *ngIf="article?.isan"><strong>ISAN:</strong> {{ article.isan }}</p>
   <p *ngIf="article?.description"><strong>Description:</strong> {{ article.description }}</p>
 
+  <button *ngIf="!isUserSelected" (click)="selectUser()">Select User</button>
   <button *ngIf="canBookArticle()" (click)="bookArticle()">Book Article</button>
-  <button *ngIf="isArticleBookedByCurrentUser() || (isAdmin && isArticleBooked())" (click)="cancelBooking()">Cancel Booking</button>
+  <button *ngIf="canCancelBooking()" (click)="cancelBooking()">Cancel Booking</button>
+  <button *ngIf="canRegisterLoan()" (click)="registerLoan()">Register Loan</button>
+  <button *ngIf="canRegisterReturn()" (click)="registerReturn()">Register Return</button>
+
 
   <button *ngIf="isAdmin" (click)="editArticle()">Modify Article</button>
   <button *ngIf="isAdmin" (click)="deleteArticle()">Delete Article</button>

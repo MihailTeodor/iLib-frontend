@@ -13,13 +13,11 @@ export class ArticlesService {
   constructor(private http: HttpClient) {}
 
   addArticle(article: ArticleDTO): Observable<any> {
-    // Retrieve the token from localStorage
     const token = localStorage.getItem('authToken');
 
-    // Define the headers with the Authorization bearer token
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`  // Add the token to the Authorization header
+      'Authorization': `Bearer ${token}`
     });
 
     return this.http.post(`${this.apiUrl}`, article, { headers });
@@ -67,22 +65,6 @@ export class ArticlesService {
     });
 
     return this.http.delete(`${this.apiUrl}/${articleId}`, { headers });
-  }
-
-  bookArticle(userId: string, articleId: string): Observable<any> {
-    const token = localStorage.getItem('authToken');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
-  
-    // Append the userId and articleId as query parameters
-    let params = new HttpParams();
-    params = params.append('userId', userId.toString());
-    params = params.append('articleId', articleId.toString());
-  
-    // Sending the POST request to register a booking
-    return this.http.post(`${this.apiUrl}`, null, { headers, params });
   }
   
 }

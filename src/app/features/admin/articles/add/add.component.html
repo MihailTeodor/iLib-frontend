@@ -23,27 +23,45 @@
 
     <!-- Conditional Fields Based on Type -->
     <div *ngIf="showBookFields()">
-      <label for="author">Author:</label>
+      <label for="author">Author: <span class="required">*</span></label>
       <input id="author" formControlName="author" type="text" />
+      <div *ngIf="addArticleForm.get('author')?.invalid && addArticleForm.get('author')?.touched" class="error">
+        Author is required.
+      </div>
 
-      <label for="isbn">ISBN:</label>
+      <label for="isbn">ISBN: <span class="required">*</span></label>
       <input id="isbn" formControlName="isbn" type="text" />
+      <div *ngIf="addArticleForm.get('isbn')?.invalid && addArticleForm.get('isbn')?.touched" class="error">
+        ISBN is required.
+      </div>
     </div>
 
     <div *ngIf="showMagazineFields()">
-      <label for="issueNumber">Issue Number:</label>
+      <label for="issueNumber">Issue Number: <span class="required">*</span></label>
       <input id="issueNumber" formControlName="issueNumber" type="number" />
+      <div *ngIf="addArticleForm.get('issueNumber')?.invalid && addArticleForm.get('issueNumber')?.touched" class="error">
+        Issue number is required.
+      </div>
 
-      <label for="issn">ISSN:</label>
+      <label for="issn">ISSN: <span class="required">*</span></label>
       <input id="issn" formControlName="issn" type="text" />
+      <div *ngIf="addArticleForm.get('issn')?.invalid && addArticleForm.get('issn')?.touched" class="error">
+        ISSN is required.
+      </div>
     </div>
 
     <div *ngIf="showMovieDvdFields()">
-      <label for="director">Director:</label>
+      <label for="director">Director: <span class="required">*</span></label>
       <input id="director" formControlName="director" type="text" />
+      <div *ngIf="addArticleForm.get('director')?.invalid && addArticleForm.get('director')?.touched" class="error">
+        Director is required.
+      </div>
 
-      <label for="isan">ISAN:</label>
+      <label for="isan">ISAN: <span class="required">*</span></label>
       <input id="isan" formControlName="isan" type="text" />
+      <div *ngIf="addArticleForm.get('isan')?.invalid && addArticleForm.get('isan')?.touched" class="error">
+        ISAN is required.
+      </div>
     </div>
 
     <!-- Common Fields -->
@@ -70,11 +88,6 @@
     <div *ngIf="addArticleForm.get('genre')?.invalid && addArticleForm.get('genre')?.touched" class="error">
       Genre is required.
     </div>
-
-    <label for="state">State:</label>
-    <select id="state" formControlName="state">
-      <option *ngFor="let state of articleStates" [value]="state">{{ state }}</option>
-    </select>
 
     <label for="description">Description:</label>
     <textarea id="description" formControlName="description"></textarea>

@@ -40,11 +40,9 @@ export class AddArticleComponent {
   }
 
 
-  // Function called when the type changes
   onTypeChange(): void {
     const selectedType = this.addArticleForm.get('type')?.value;
 
-    // Reset fields that shouldn't be used for the selected type
     if (selectedType === ArticleType.BOOK) {
       this.addArticleForm.get('issueNumber')?.reset();
       this.addArticleForm.get('issn')?.reset();
@@ -63,7 +61,6 @@ export class AddArticleComponent {
     }
   }
 
-  // Conditional display of fields
   showBookFields(): boolean {
     return this.addArticleForm.get('type')?.value === ArticleType.BOOK;
   }
@@ -81,7 +78,6 @@ export class AddArticleComponent {
       this.articlesService.addArticle(newArticle).subscribe({
         next: () => {
           console.log('Article added successfully');
-          // handle success, maybe navigate away or display a success message
           this.router.navigate(['/admin'], { state: { message: 'Article added successfully' } });
 
         },
