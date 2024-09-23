@@ -7,6 +7,8 @@ import { UserDashboardDTO } from '../../../shared/models/user-dashboard.dto';
 import { UsersService } from '../../users/users.service';
 import { BookingService } from '../bookings.service';
 import { LoanService } from '../loans.service';
+import { differenceInCalendarDays } from 'date-fns';
+
 
 @Component({
   selector: 'app-article-details',
@@ -271,6 +273,38 @@ export class ArticleDetailComponent implements OnInit {
         this.errorMessage =
           error.error.error ||
           'An error occurred while returning the article.';
+      },
+    });
+  }
+
+  canExtendLoan(): boolean {
+    if (!this.isAdmin || !this.isArticleOnLoan() || this.article?.state === 'ONLOANBOOKED' || this.article?.loanDTO?.renewed) {
+      return false;
+    }
+    const dueDate = new Date(this.article?.loanDTO?.dueDate!);
+    const today = new Date();
+  
+    const dayDifference = differenceInCalendarDays(dueDate, today);
+  
+    return dayDifference >= 0 && dayDifference <= 3;
+  }
+
+  extendLoan(): void {
+    this.loanService.extendLoan(this.article?.loanDTO?.id!).subscribe({
+      next: () => {
+        console.log('Loan extended successfully');
+        if (history.state.userId != this.article?.loanDTO?.loaningUserId) {
+          this.loadArticleDetails(this.article!.id!);
+        }
+          this.router.navigate(['/admin/dashboard', history.state.userId], {
+            state: { message: 'Loan extended successfully' },
+          });
+      },
+      error: (error) => {
+        console.error('Error extending loan', error);
+        this.errorMessage =
+          error.error.error ||
+          'An error occurred while extending the loan.';
       },
     });
   }
