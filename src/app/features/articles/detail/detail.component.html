@@ -10,6 +10,8 @@
   <p *ngIf="article?.state === 'ONLOANBOOKED'"><strong>State: ONLOAN</strong> until {{ article.loanDTO?.dueDate | date }} and <strong>BOOKED</strong> until {{ article.bookingDTO?.bookingEndDate | date }}</p>
   <p *ngIf="article?.state === 'AVAILABLE'"><strong>State: {{ article.state }}</strong></p>
   <p *ngIf="article?.state === 'UNAVAILABLE'"><strong>State: {{ article.state }}</strong></p>
+  <p *ngIf="isAdmin"><strong>Renewed:</strong> {{ article.loanDTO?.renewed }}</p>
+
 
   <p *ngIf="article?.isbn"><strong>ISBN:</strong> {{ article.isbn }}</p>
   <p *ngIf="article?.issn"><strong>ISSN:</strong> {{ article.issn }}</p>
@@ -21,7 +23,7 @@
   <button *ngIf="canCancelBooking()" (click)="cancelBooking()">Cancel Booking</button>
   <button *ngIf="canRegisterLoan()" (click)="registerLoan()">Register Loan</button>
   <button *ngIf="canRegisterReturn()" (click)="registerReturn()">Register Return</button>
-
+  <button *ngIf="canExtendLoan()" (click)="extendLoan()">Extend Loan</button>
 
   <button *ngIf="isAdmin" (click)="editArticle()">Modify Article</button>
   <button *ngIf="isAdmin" (click)="deleteArticle()">Delete Article</button>
