@@ -6,6 +6,7 @@ import { ArticlesService } from '../articles.service';
 import { UserDashboardDTO } from '../../../shared/models/user-dashboard.dto';
 import { UsersService } from '../../users/users.service';
 import { BookingService } from '../bookings.service';
+import { LoanService } from '../loans.service';
 
 @Component({
   selector: 'app-article-details',
@@ -26,8 +27,9 @@ export class ArticleDetailComponent implements OnInit {
     private authService: AuthService,
     private articlesService: ArticlesService,
     private usersService: UsersService,
-    private bookingService: BookingService
-  ) {}
+    private bookingService: BookingService,
+    private loanService: LoanService
+  ) { }
 
   ngOnInit(): void {
     this.setupButtonText();
@@ -38,9 +40,10 @@ export class ArticleDetailComponent implements OnInit {
     } else {
       this.router.navigate(['/articles/search']);
     }
-
-    const selectedUserId = history.state.userId || this.authService.getUserId();
-    this.loadUserInfo(selectedUserId, 'selectedUser');
+    if (history.state.userId || !this.isAdmin) {
+      const selectedUserId = history.state.userId || this.authService.getUserId();
+      this.loadUserInfo(selectedUserId, 'selectedUser');
+    }
   }
 
   setupButtonText(): void {
@@ -65,7 +68,7 @@ export class ArticleDetailComponent implements OnInit {
         if (this.article?.bookingDTO && this.isAdmin) {
           this.loadUserInfo(this.article.bookingDTO.bookingUserId, 'bookingUser');
         }
-    
+
         if (this.article?.loanDTO && this.isAdmin) {
           this.loadUserInfo(this.article.loanDTO.loaningUserId, 'loaningUser');
         }
@@ -99,17 +102,24 @@ export class ArticleDetailComponent implements OnInit {
   }
 
   get isUserSelected(): boolean {
-    return history.state.userId;
+    return !this.isAdmin || history.state.userId;
+  }
+
+  selectUser(): void {
+    this.router.navigate(['/admin/users/search'], {
+      state: { fromArticlePage: true, articleId: this.article!.id },
+    });
+
   }
 
   canBookArticle(): boolean {
-    if (!this.article) {
+    if (!this.isUserSelected) {
       return false;
     }
-    if (this.article.state === 'AVAILABLE') {
+    if (this.article!.state === 'AVAILABLE') {
       return true;
     }
-    if (this.article.state === 'ONLOAN') {
+    if (this.article!.state === 'ONLOAN') {
       return !this.isArticleOnLoanByCurrentUser();
     }
     return false;
@@ -123,69 +133,38 @@ export class ArticleDetailComponent implements OnInit {
   }
 
   bookArticle(): void {
-    const isAdminBooking = this.isAdmin && !history.state.userId;
+    this.bookingService.bookArticle(this.selectedUser?.id!, this.article!.id!).subscribe({
+      next: () => {
+        console.log('Article booked successfully');
 
-    if (this.article && isAdminBooking) {
-      this.router.navigate(['/admin/users/search'], {
-        state: { fromArticleBooking: true, articleId: this.article.id },
-      });
-    } else {
-      if (this.article && this.selectedUser?.id && this.canBookArticle()) {
-        this.bookingService.bookArticle(this.selectedUser?.id, this.article.id!).subscribe({
-          next: () => {
-            console.log('Article booked successfully');
-
-            if (history.state.userId) {
-              this.router.navigate(['/admin/dashboard', history.state.userId], {
-                state: { message: 'Article booked successfully' },
-              });
-            } else {
-              this.router.navigate(['/users'], {
-                state: { message: 'Article booked successfully' },
-              });
-            }
-          },
-          error: (error) => {
-            console.error('Error booking article', error);
-            this.errorMessage =
-              error.error.error ||
-              'An error occurred while booking the article.';
-          },
-        });
-      } else {
-        this.errorMessage = 'This article cannot be booked at the moment.';
-      }
-    }
+        if (history.state.userId) {
+          this.router.navigate(['/admin/dashboard', history.state.userId], {
+            state: { message: 'Article booked successfully' },
+          });
+        } else {
+          this.router.navigate(['/users'], {
+            state: { message: 'Article booked successfully' },
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error booking article', error);
+        this.errorMessage =
+          error.error.error ||
+          'An error occurred while booking the article.';
+      },
+    });
   }
 
-  cancelBooking(): void {
-    if (this.article?.bookingDTO) {
-      this.bookingService.cancelBooking(this.article.bookingDTO.id!).subscribe({
-        next: () => {
-            console.log('Booking cancelled successfully');
-            if (history.state.userId) {
-              this.router.navigate(['/admin/dashboard', history.state.userId], {
-                state: { message: 'Booking cancelled successfully' },
-              });
-            } else if (this.isAdmin) {
-              this.router.navigate(['/admin'], {
-                state: { message: 'Booking cancelled successfully' },
-              });
-            } else {
-              this.router.navigate(['/users'], {
-                state: { message: 'Booking cancelled successfully' },
-              });
-            }
-          },
-          error: (error) => {
-            console.error('Error cancelling booking', error);
-            this.errorMessage =
-              error.error.error ||
-              'An error occurred while cancelling the booking.';
-          },
-        });
-      }
-    }
+  canCancelBooking(): boolean {
+    if (!this.isArticleBooked())
+      return false;
+
+    if (this.isAdmin || this.isArticleBookedByCurrentUser())
+      return true;
+
+    return false;
+  }
 
   isArticleBookedByCurrentUser(): boolean {
     if (this.article?.bookingDTO) {
@@ -199,6 +178,101 @@ export class ArticleDetailComponent implements OnInit {
 
   isArticleBooked(): boolean {
     return (this.article?.state === 'BOOKED' || this.article?.state === 'ONLOANBOOKED')
+  }
+
+  cancelBooking(): void {
+    this.bookingService.cancelBooking(this.article!.bookingDTO!.id!).subscribe({
+      next: () => {
+        console.log('Booking cancelled successfully');
+        if (history.state.userId != this.article?.bookingDTO?.bookingUserId) {
+          this.loadArticleDetails(this.article!.id!);
+        }else if (history.state.userId) {
+          this.router.navigate(['/admin/dashboard', history.state.userId], {
+            state: { message: 'Booking cancelled successfully' },
+          });
+        } else if (this.isAdmin) {
+          this.router.navigate(['/admin/dashboard', history.state.userId], {
+            state: { message: 'Booking cancelled successfully' },
+          });
+        } else {
+          this.router.navigate(['/users'], {
+            state: { message: 'Booking cancelled successfully' },
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error cancelling booking', error);
+        this.errorMessage =
+          error.error.error ||
+          'An error occurred while cancelling the booking.';
+      },
+    });
+  }
+
+  canRegisterLoan(): boolean {
+    if (!this.isAdmin) {
+      return false;
+    }
+    if (!this.isUserSelected) {
+      return false;
+    }
+    if (this.article!.state === 'AVAILABLE') {
+      return true;
+    }
+    if (this.article!.state === 'BOOKED' && this.selectedUser?.id === this.article!.bookingDTO?.bookingUserId) {
+      return true;
+    }
+    return false;
+  }
+
+
+  registerLoan(): void {
+      this.loanService.registerLoan(this.selectedUser!.id, this.article!.id!).subscribe({
+        next: () => {
+          console.log('Loan registered successfully');
+          this.router.navigate(['/admin/dashboard', history.state.userId], {
+            state: { message: 'Loan registered successfully' },
+          });
+        },
+        error: (error) => {
+          console.error('Error registering loan', error);
+          this.errorMessage = error.error.error || 'An error occurred while registering the loan.';
+        },
+      });
+  }
+
+  isArticleOnLoan(): boolean {
+    return (this.article?.state === 'ONLOAN' || this.article?.state === 'ONLOANBOOKED')
+  }
+
+  canRegisterReturn(): boolean {
+    if (!this.isArticleOnLoan()) {
+      return false;
+    }
+    if(!this.isAdmin) {
+      return false;
+    }
+    return true;
+  }
+
+  registerReturn(): void {
+    this.loanService.registerReturn(this.article?.loanDTO?.id!).subscribe({
+      next: () => {
+        console.log('Article returned successfully');
+        if (history.state.userId != this.article?.bookingDTO?.bookingUserId) {
+          this.loadArticleDetails(this.article!.id!);
+        }
+          this.router.navigate(['/admin/dashboard', history.state.userId], {
+            state: { message: 'Article returned successfully' },
+          });
+      },
+      error: (error) => {
+        console.error('Error returning article', error);
+        this.errorMessage =
+          error.error.error ||
+          'An error occurred while returning the article.';
+      },
+    });
   }
 
   editArticle(): void {
@@ -233,9 +307,9 @@ export class ArticleDetailComponent implements OnInit {
     if (history.state.fromUserDashboard) {
       this.router.navigate(['/admin/dashboard', history.state.userId]);
     } else if (history.state.fromSearch) {
-      this.router.navigate(['/articles/search'], { state: { searchFormData: history.state.searchFormData, articles: history.state.articles } });
+      this.router.navigate(['/articles/search'], { state: { searchFormData: history.state.searchFormData, articles: history.state.articles, userId: history.state.userId } });
     } else if (history.state.fromUserBooking) {
-      this.router.navigate(['/admin/users/search'], { state: { fromArticleBooking: true, articleId: this.article?.id, searchFormData: history.state.searchFormData, users: history.state.users } });
+      this.router.navigate(['/admin/users/search'], { state: { fromArticlePage: true, articleId: this.article?.id, searchFormData: history.state.searchFormData, users: history.state.users } });
     } else {
       this.router.navigate(['/articles/search']);
     }
@@ -245,5 +319,5 @@ export class ArticleDetailComponent implements OnInit {
   goToUserDashboard(userId: string): void {
     this.router.navigate(['/admin/dashboard', userId]);
   }
-  
+
 }

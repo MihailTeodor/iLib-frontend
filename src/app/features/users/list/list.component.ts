@@ -19,7 +19,7 @@ export class UserListComponent {
   constructor(private router: Router) { }
 
   onSelectUser(user: UserDTO): void {
-    if (history.state.fromArticleBooking) {
+    if (history.state.fromArticlePage) {
       const articleId = history.state.articleId;
       if (articleId) {
         this.router.navigate(['/articles/details', articleId], { state: { userId: user.id, fromUserBooking: true, searchFormData: this.searchFormData, users: this.users } });

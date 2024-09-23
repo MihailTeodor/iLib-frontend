@@ -7,13 +7,27 @@
     <p *ngIf="userInfo.address"><strong>Address:</strong> {{ userInfo.address }}</p>
   </div>
 
-  <div *ngIf="userInfo.loans && userInfo.loans.length > 0">
+  <div *ngIf="loans.length > 0">
     <h2>Your Loans</h2>
     <ul>
-      <li *ngFor="let loan of userInfo.loans">
-        <strong>{{ loan.articleTitle }}</strong> - Due on {{ loan.dueDate | date }}
+      <li *ngFor="let loan of loans">
+        <button class="booking-button" (click)="goToArticleDetails(loan.articleId)">
+          <strong>{{ loan.articleTitle }}</strong>
+        </button>
+        <span *ngIf="isLoanActive(loan)">
+          Due on {{ loan.dueDate | date }}
+        </span>
+        <span *ngIf="!isLoanActive(loan)">
+          {{ loan.state }}
+        </span>
       </li>
     </ul>
+
+    <div class="pagination-controls" *ngIf="showAllLoans && totalLoansPages > 1">
+      <button (click)="previousLoanPage()" [disabled]="currentLoansPage === 1">Previous</button>
+      <span>Page {{ currentLoansPage }} of {{ totalLoansPages }}</span>
+      <button (click)="nextLoanPage()" [disabled]="currentLoansPage === totalLoansPages">Next</button>
+    </div>
   </div>
 
   <div *ngIf="bookings.length > 0">
@@ -24,23 +38,27 @@
           <strong>{{ booking.bookedArticleTitle }}</strong>
         </button>  
         <span *ngIf="isBookingActive(booking)">
-          Reserved until {{ booking.bookingEndDate | date }} (Active)
+          Reserved until {{ booking.bookingEndDate | date }}
         </span>
         <span *ngIf="!isBookingActive(booking)">
-          {{ booking.state }}
-        </span>
+          {{ booking.state }} 
+        </span> 
       </li>
     </ul>
 
-    <div class="pagination-controls" *ngIf="showAllBookings && totalPages > 1">
-      <button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
-      <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+    <div class="pagination-controls" *ngIf="showAllBookings && totalBookingPages > 1">
+      <button (click)="previousBookingPage()" [disabled]="currentBookingsPage === 1">Previous</button>
+      <span>Page {{ currentBookingsPage }} of {{ totalBookingPages }}</span>
+      <button (click)="nextBookingPage()" [disabled]="currentBookingsPage === totalBookingPages">Next</button>
     </div>
   </div>
 
   <button *ngIf="userInfo.totalBookings > maxBookingsPerPage" (click)="toggleBookingHistory()">
     {{ showAllBookings ? 'Hide History' : 'Show History' }}
+  </button>
+
+  <button *ngIf="userInfo.totalLoans > maxLoansPerPage" (click)="toggleLoanHistory()">
+    {{ showAllLoans ? 'Hide History' : 'Show History' }}
   </button>
 
   <button (click)="searchArticles()">Search Articles</button>
