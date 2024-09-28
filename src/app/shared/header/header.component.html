@@ -1,6 +1,10 @@
 <div class="app-header">
     <span class="header-title">ILib</span>
     
+    <div class="current-backend">
+      Current Backend: {{ currentBackend }}
+    </div>
+    
     <div class="header-buttons">
       <button (click)="goHome()">Back to Dashboard</button>
       <button (click)="logout()">Logout</button>

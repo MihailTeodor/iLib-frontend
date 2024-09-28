@@ -28,5 +28,12 @@
   
       <button type="submit" [disabled]="loginForm.invalid">Login</button>
     </form>
+
+      <!-- Backend Switch Button -->
+    <button (click)="switchBackend()" class="switch-backend-button">{{ environmentLabel }}</button>
+
+    <div class="current-backend">
+      Current Backend: {{ currentBackend }}
+    </div>
   </div>
   

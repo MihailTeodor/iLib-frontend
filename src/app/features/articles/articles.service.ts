@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.prod';
 import { ArticleDTO } from '../../shared/models/article.dto';
+import { BackendService } from '../../shared/backend.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticlesService {
-  private apiUrl = `${environment.backendUrl}/articlesEndpoint`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private backendService: BackendService) {}
+
+  private get apiUrl(): string {
+    return `${this.backendService.getBackendUrl()}/articlesEndpoint`;
+  }
 
   addArticle(article: ArticleDTO): Observable<any> {
     const token = localStorage.getItem('authToken');

@@ -7,7 +7,11 @@
     <p *ngIf="userInfo.address"><strong>Address:</strong> {{ userInfo.address }}</p>
   </div>
 
-  <div *ngIf="loans.length > 0">
+    <div *ngIf="loans.length == 0">
+      <h2>No Loans associated to this user!</h2>
+    </div>  
+
+    <div *ngIf="loans.length > 0">
     <h2>Your Loans</h2>
     <ul>
       <li *ngFor="let loan of loans">
@@ -29,6 +33,10 @@
       <button (click)="nextLoanPage()" [disabled]="currentLoansPage === totalLoansPages">Next</button>
     </div>
   </div>
+
+  <div *ngIf="bookings.length == 0">
+    <h2>No Bookings associated to this user!</h2>
+  </div>  
 
   <div *ngIf="bookings.length > 0">
     <h2>Your Bookings</h2>

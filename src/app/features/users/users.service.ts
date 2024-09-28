@@ -1,7 +1,7 @@
+import { BackendService } from './../../shared/backend.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.prod';
 import { UserDTO } from '../../shared/models/user.dto';
 import { UserDashboardDTO } from '../../shared/models/user-dashboard.dto';
 
@@ -9,9 +9,12 @@ import { UserDashboardDTO } from '../../shared/models/user-dashboard.dto';
   providedIn: 'root'
 })
 export class UsersService {
-  private apiUrl = `${environment.backendUrl}/usersEndpoint`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private backendService: BackendService) {}
+
+  private get apiUrl(): string {
+    return `${this.backendService.getBackendUrl()}/usersEndpoint`;
+  }
 
   createUser(user: UserDTO): Observable<any> {
     const token = localStorage.getItem('authToken');

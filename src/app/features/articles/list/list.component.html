@@ -8,6 +8,7 @@
           <th>Publisher</th>
           <th>Year</th>
           <th>Type</th>
+          <th>Location</th>
           <th>State</th>
           <th>Actions</th>
         </tr>
@@ -19,6 +20,7 @@
           <td>{{ article.publisher }}</td>
           <td>{{ article.yearEdition | date: 'yyyy' }}</td>
           <td>{{ article.type }}</td>
+          <td>{{ article.location }}</td>
           <td>{{ article.state }}</td>
           <td>
             <button (click)="onSelectArticle(article)">Details</button>

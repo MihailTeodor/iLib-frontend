@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { BackendService } from '../../../shared/backend.service';
 
 @Component({
   selector: 'app-login',
@@ -11,16 +12,24 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   loginForm: FormGroup;
   errorMessage: string | null = null;
+  environmentLabel: string = 'Switch to C# Backend';
+  currentBackend: string = '';
+
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private backendService: BackendService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]]
     });
+  }
+
+  ngOnInit(): void {
+    this.currentBackend = this.backendService.getCurrentBackendName();
   }
 
   onSubmit(): void {
@@ -44,4 +53,15 @@ export class LoginComponent {
       });
     }
   }  
+
+  switchBackend(): void {
+    if (this.environmentLabel === 'Switch to C# Backend') {
+      this.backendService.switchToCsharpBackend();
+      this.environmentLabel = 'Switch to Java Backend';
+    } else {
+      this.backendService.switchToJavaBackend();
+      this.environmentLabel = 'Switch to C# Backend';
+    }
+    this.currentBackend = this.backendService.getCurrentBackendName();
+  }
 }
