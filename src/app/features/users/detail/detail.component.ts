@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserDTO } from '../../../shared/models/user.dto';
 import { AuthService } from '../../auth/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-details',
@@ -12,14 +13,18 @@ export class UserDetailComponent implements OnInit {
   user: UserDTO | null = null;
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private authService: AuthService,
-  ) {}
+    private snackBar: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
     if (history.state.user) {
       this.user = history.state.user;
     } else {
+      this.snackBar.open('User not found.', 'Close', {
+        duration: 3000,
+      });
       this.router.navigate(['/users/search']);
     }
   }
@@ -27,7 +32,7 @@ export class UserDetailComponent implements OnInit {
   get isAdmin(): boolean {
     return this.authService.getUserRole() === 'ADMINISTRATOR';
   }
-  
+
   editUser(): void {
     this.router.navigate(['/admin/users/edit', this.user?.id], { state: { user: this.user } });
   }

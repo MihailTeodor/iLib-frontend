@@ -1,64 +1,95 @@
-<div class="search-articles-form">
+<mat-card class="search-articles-form">
   <h2>Search Articles</h2>
+  <button mat-button (click)="toggleForm()" class="toggle-button">
+    <mat-icon>{{ formCollapsed ? 'expand_more' : 'expand_less' }}</mat-icon>
+    {{ formCollapsed ? 'Show Search' : 'Hide Search' }}
+  </button>
 
- <!-- Toggle button to collapse/expand the search form -->
-<button class="toggle-button" (click)="toggleForm()">
-  <span *ngIf="formCollapsed">▼ Show Search</span>
-  <span *ngIf="!formCollapsed">▲ Hide Search</span>
-</button>
+  <mat-expansion-panel [expanded]="!formCollapsed">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Search Criteria</mat-panel-title>
+    </mat-expansion-panel-header>
 
+    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <mat-form-field appearance="fill">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" type="text" />
+        </mat-form-field>
 
-  <!-- Collapsible form -->
-  <form *ngIf="!formCollapsed" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
-    <label for="title">Title:</label>
-    <input id="title" formControlName="title" type="text" />
+        <mat-form-field appearance="fill">
+          <mat-label>Author</mat-label>
+          <input matInput formControlName="author" type="text" />
+        </mat-form-field>
 
-    <label for="author">Author:</label>
-    <input id="author" formControlName="author" type="text" />
+        <mat-form-field appearance="fill">
+          <mat-label>ISBN</mat-label>
+          <input matInput formControlName="isbn" type="text" />
+        </mat-form-field>
 
-    <label for="isbn">ISBN:</label>
-    <input id="isbn" formControlName="isbn" type="text" />
+        <mat-form-field appearance="fill">
+          <mat-label>ISSN</mat-label>
+          <input matInput formControlName="issn" type="text" />
+        </mat-form-field>
 
-    <label for="issn">ISSN:</label>
-    <input id="issn" formControlName="issn" type="text" />
+        <mat-form-field appearance="fill">
+          <mat-label>ISAN</mat-label>
+          <input matInput formControlName="isan" type="text" />
+        </mat-form-field>
 
-    <label for="isan">ISAN:</label>
-    <input id="isan" formControlName="isan" type="text" />
+        <mat-form-field appearance="fill">
+          <mat-label>Genre</mat-label>
+          <input matInput formControlName="genre" type="text" />
+        </mat-form-field>
 
-    <label for="genre">Genre:</label>
-    <input id="genre" formControlName="genre" type="text" />
+        <mat-form-field appearance="fill">
+          <mat-label>Publisher</mat-label>
+          <input matInput formControlName="publisher" type="text" />
+        </mat-form-field>
 
-    <label for="publisher">Publisher:</label>
-    <input id="publisher" formControlName="publisher" type="text" />
+        <mat-form-field appearance="fill">
+          <mat-label>Year of Edition</mat-label>
+          <input matInput formControlName="yearEdition" type="date" />
+        </mat-form-field>
 
-    <label for="yearEdition">Year of Edition:</label>
-    <input id="yearEdition" formControlName="yearEdition" type="date" />
+        <mat-form-field appearance="fill">
+          <mat-label>Issue Number</mat-label>
+          <input matInput formControlName="issueNumber" type="number" />
+        </mat-form-field>
 
-    <label for="issueNumber">Issue Number:</label>
-    <input id="issueNumber" formControlName="issueNumber" type="number" />
+        <mat-form-field appearance="fill">
+          <mat-label>Director</mat-label>
+          <input matInput formControlName="director" type="text" />
+        </mat-form-field>
 
-    <label for="director">Director:</label>
-    <input id="director" formControlName="director" type="text" />
+        <mat-form-field appearance="fill">
+          <mat-label>Results Per Page</mat-label>
+          <mat-select formControlName="resultsPerPage" (selectionChange)="onResultsPerPageChange()">
+            <mat-option *ngFor="let option of resultsPerPageOptions" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-    <!-- Dropdown to select results per page -->
-    <label for="resultsPerPage">Results Per Page:</label>
-    <select id="resultsPerPage" formControlName="resultsPerPage" (change)="onResultsPerPageChange()">
-      <option *ngFor="let option of resultsPerPageOptions" [value]="option">{{ option }}</option>
-    </select>
+      <div class="button-group">
+        <button mat-raised-button color="primary" type="submit">
+          <mat-icon>search</mat-icon>
+          Search
+        </button>
+      </div>
+    </form>
+  </mat-expansion-panel>
 
-    <button type="submit">Search</button>
-  </form>
+  <app-article-list
+    *ngIf="articles.length > 0"
+    [articles]="articles"
+    [totalResults]="totalResults"
+    [totalPages]="totalPages"
+    [currentPage]="currentPage"
+    [searchFormData]="searchForm.value"
+    (pageChange)="goToPage($event)"
+  ></app-article-list>
 
-
-  <!-- Display the ArticleListComponent -->
-  <app-article-list [articles]="articles" 
-                    [totalResults]="totalResults"
-                    [totalPages]="totalPages"
-                    [currentPage]="currentPage"
-                    [searchFormData]="searchForm.value"
-                    (pageChange)="goToPage($event)">
-  </app-article-list>
-
-  <!-- Error Message -->
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-</div>
+</mat-card>

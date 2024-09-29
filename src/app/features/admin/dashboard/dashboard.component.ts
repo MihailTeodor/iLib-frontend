@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,22 +8,18 @@ import { Component } from '@angular/core';
 })
 export class DashboardComponent {
   message: string | null = null;
-  showMessage: boolean = false;
 
-  constructor() { }
+  constructor(private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     if (history.state.message) {
       this.message = history.state.message;
-      this.showMessage = true;
 
-      setTimeout(() => {
-        this.showMessage = false;
-      }, 1000);
+      this.snackBar.open(this.message!, 'Close', {
+        duration: 3000,
+        verticalPosition: 'top',
+        horizontalPosition: 'right',
+      });
     }
-  }
-
-  closeMessage(): void {
-    this.showMessage = false;
   }
 }

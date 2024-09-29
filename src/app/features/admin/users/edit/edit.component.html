@@ -1,41 +1,60 @@
-<div class="edit-user-form">
-    <h2>Edit User</h2>
-  
-    <!-- Legend for required fields -->
-    <p class="required-legend">Fields marked with <span class="required">*</span> are mandatory.</p>
-  
-    <form [formGroup]="editUserForm" (ngSubmit)="onSubmit()">
-      <label for="email">Email: <span class="required">*</span></label>
-      <input id="email" formControlName="email" type="email" />
-      <div *ngIf="editUserForm.get('email')?.invalid && editUserForm.get('email')?.touched" class="error">
+<mat-card class="edit-user-form">
+  <h2>Edit User</h2>
+
+  <form [formGroup]="editUserForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" />
+      <mat-error *ngIf="editUserForm.get('email')?.invalid && editUserForm.get('email')?.touched">
         Email is required and must be a valid email.
-      </div>
-  
-      <label for="name">Name: <span class="required">*</span></label>
-      <input id="name" formControlName="name" type="text" />
-      <div *ngIf="editUserForm.get('name')?.invalid && editUserForm.get('name')?.touched" class="error">
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" type="text" />
+      <mat-error *ngIf="editUserForm.get('name')?.invalid && editUserForm.get('name')?.touched">
         Name is required.
-      </div>
-  
-      <label for="surname">Surname: <span class="required">*</span></label>
-      <input id="surname" formControlName="surname" type="text" />
-      <div *ngIf="editUserForm.get('surname')?.invalid && editUserForm.get('surname')?.touched" class="error">
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Surname</mat-label>
+      <input matInput formControlName="surname" type="text" />
+      <mat-error *ngIf="editUserForm.get('surname')?.invalid && editUserForm.get('surname')?.touched">
         Surname is required.
-      </div>
-  
-      <label for="address">Address:</label>
-      <input id="address" formControlName="address" type="text" />
-  
-      <label for="telephoneNumber">Telephone Number: <span class="required">*</span></label>
-      <input id="telephoneNumber" formControlName="telephoneNumber" type="text" />
-      <div *ngIf="editUserForm.get('telephoneNumber')?.invalid && editUserForm.get('telephoneNumber')?.touched" class="error">
-        Telephone number is required and must be exactly 10 digits.
-      </div>
-  
-      <!-- Submit Button -->
-      <button type="submit" [disabled]="editUserForm.invalid">Update User</button>
-    </form>
-  
-    <!-- Back Button -->
-    <button (click)="goBack()" class="back-button">Back</button>
-  </div>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Address</mat-label>
+      <input matInput formControlName="address" type="text" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Telephone Number</mat-label>
+      <input matInput formControlName="telephoneNumber" type="text" />
+      <mat-error
+        *ngIf="
+          editUserForm.get('telephoneNumber')?.errors?.['digitsOnly'] &&
+          editUserForm.get('telephoneNumber')?.touched
+        "
+      >
+        Telephone number must contain only digits.
+      </mat-error>
+      <mat-error
+        *ngIf="
+          (editUserForm.get('telephoneNumber')?.errors?.['minlength'] ||
+            editUserForm.get('telephoneNumber')?.errors?.['maxlength']) &&
+          editUserForm.get('telephoneNumber')?.touched
+        "
+      >
+        Telephone number must be exactly 10 digits.
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" [disabled]="editUserForm.invalid">
+      <mat-icon>save</mat-icon>
+      Update User
+    </button>
+    <button mat-button type="button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </button>
+  </form>
+</mat-card>

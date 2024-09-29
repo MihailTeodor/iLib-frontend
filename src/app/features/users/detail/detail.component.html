@@ -1,16 +1,24 @@
-<div class="user-details" *ngIf="user">
-  <h2>{{ user.name }} {{ user.surname }}</h2>
-  <p><strong>Email:</strong> {{ user.email }}</p>
-  <p><strong>Telephone Number:</strong> {{ user.telephoneNumber }}</p>
-  <p *ngIf="user?.address"><strong>Address:</strong> {{ user.address }}</p>
+<mat-card class="user-details" *ngIf="user">
+  <mat-card-title>{{ user.name }} {{ user.surname }}</mat-card-title>
+  <mat-card-content>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Telephone Number:</strong> {{ user.telephoneNumber }}</p>
+    <p *ngIf="user?.address"><strong>Address:</strong> {{ user.address }}</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" *ngIf="isAdmin" (click)="editUser()">
+      <mat-icon>edit</mat-icon>
+      Modify User
+    </button>
+    <button mat-raised-button color="accent" *ngIf="isAdmin" (click)="goToUserDashboard()">
+      <mat-icon>dashboard</mat-icon>
+      User Dashboard
+    </button>
+    <button mat-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Search
+    </button>
+  </mat-card-actions>
+</mat-card>
 
-  <button *ngIf="isAdmin" (click)="editUser()">Modify User</button>
-  <button *ngIf="isAdmin" (click)="goToUserDashboard()">User Dashboard</button>
-
-  <button (click)="goBack()" class="back-button">Back to Search</button>
-</div>
-
-<div class="user-details" *ngIf="!user">
-  <p>User not found.</p>
-  <button (click)="goBack()" class="back-button">Back to Search</button>
-</div>
+<mat-spinner *ngIf="!user"></mat-spinner>

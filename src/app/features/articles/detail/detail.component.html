@@ -1,71 +1,143 @@
-<div class="article-details" *ngIf="article">
-  <h2>{{ article.title }}</h2>
-  <p><strong>Author:</strong> {{ article.author }}</p>
-  <p><strong>Publisher:</strong> {{ article.publisher }}</p>
-  <p><strong>Year:</strong> {{ article.yearEdition | date: 'yyyy' }}</p>
-  <p><strong>Genre:</strong> {{ article.genre }}</p>
-  <p><strong>Type:</strong> {{ article.type }}</p>
-  <p *ngIf="article?.state === 'BOOKED'"><strong>State: {{ article.state }}</strong> until {{ article.bookingDTO?.bookingEndDate | date }}</p>
-  <p *ngIf="article?.state === 'ONLOAN'"><strong>State: {{ article.state }}</strong> until {{ article.loanDTO?.dueDate | date }}</p>
-  <p *ngIf="article?.state === 'ONLOANBOOKED'"><strong>State: ONLOAN</strong> until {{ article.loanDTO?.dueDate | date }} and <strong>BOOKED</strong> until {{ article.bookingDTO?.bookingEndDate | date }}</p>
-  <p *ngIf="article?.state === 'AVAILABLE'"><strong>State: {{ article.state }}</strong></p>
-  <p *ngIf="article?.state === 'UNAVAILABLE'"><strong>State: {{ article.state }}</strong></p>
-  <p *ngIf="isAdmin"><strong>Renewed:</strong> {{ article.loanDTO?.renewed }}</p>
+<mat-card class="article-details" *ngIf="article">
+  <mat-card-title>{{ article.title }}</mat-card-title>
+  <mat-card-content>
+    <p><strong>Author:</strong> {{ article.author }}</p>
+    <p><strong>Publisher:</strong> {{ article.publisher }}</p>
+    <p><strong>Year:</strong> {{ article.yearEdition | date: 'yyyy' }}</p>
+    <p><strong>Genre:</strong> {{ article.genre }}</p>
+    <p><strong>Type:</strong> {{ article.type }}</p>
+    <p *ngIf="article?.isbn"><strong>ISBN:</strong> {{ article.isbn }}</p>
+    <p *ngIf="article?.issn"><strong>ISSN:</strong> {{ article.issn }}</p>
+    <p *ngIf="article?.isan"><strong>ISAN:</strong> {{ article.isan }}</p>
+    <p *ngIf="article?.description"><strong>Description:</strong> {{ article.description }}</p>
 
+    <p *ngIf="article?.state === 'BOOKED'">
+      <strong>State:</strong> {{ article.state }} until {{ article.bookingDTO?.bookingEndDate | date }}
+    </p>
+    <p *ngIf="article?.state === 'ONLOAN'">
+      <strong>State:</strong> {{ article.state }} until {{ article.loanDTO?.dueDate | date }}
+    </p>
+    <p *ngIf="article?.state === 'ONLOANBOOKED'">
+      <strong>State:</strong> ONLOAN until {{ article.loanDTO?.dueDate | date }} and BOOKED until {{ article.bookingDTO?.bookingEndDate | date }}
+    </p>
+    <p *ngIf="article?.state === 'AVAILABLE'">
+      <strong>State:</strong> {{ article.state }}
+    </p>
+    <p *ngIf="article?.state === 'UNAVAILABLE'">
+      <strong>State:</strong> {{ article.state }}
+    </p>
+    <p *ngIf="isAdmin && (article?.state === 'ONLOAN' || article?.state === 'ONLOANBOOKED')">
+      <strong>Renewed:</strong> {{ article.loanDTO?.renewed }}
+    </p>
+  </mat-card-content>
 
-  <p *ngIf="article?.isbn"><strong>ISBN:</strong> {{ article.isbn }}</p>
-  <p *ngIf="article?.issn"><strong>ISSN:</strong> {{ article.issn }}</p>
-  <p *ngIf="article?.isan"><strong>ISAN:</strong> {{ article.isan }}</p>
-  <p *ngIf="article?.description"><strong>Description:</strong> {{ article.description }}</p>
+  <mat-divider></mat-divider>
 
-  <button *ngIf="!isUserSelected" (click)="selectUser()">Select User</button>
-  <button *ngIf="canBookArticle()" (click)="bookArticle()">Book Article</button>
-  <button *ngIf="canCancelBooking()" (click)="cancelBooking()">Cancel Booking</button>
-  <button *ngIf="canRegisterLoan()" (click)="registerLoan()">Register Loan</button>
-  <button *ngIf="canRegisterReturn()" (click)="registerReturn()">Register Return</button>
-  <button *ngIf="canExtendLoan()" (click)="extendLoan()">Extend Loan</button>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" *ngIf="!isUserSelected" (click)="selectUser()">
+      <mat-icon>person_add</mat-icon>
+      Select User
+    </button>
+    <button mat-raised-button color="primary" *ngIf="canBookArticle()" (click)="bookArticle()">
+      <mat-icon>book</mat-icon>
+      Book Article
+    </button>
+    <button mat-raised-button color="warn" *ngIf="canCancelBooking()" (click)="cancelBooking()">
+      <mat-icon>cancel</mat-icon>
+      Cancel Booking
+    </button>
+    <button mat-raised-button color="accent" *ngIf="canRegisterLoan()" (click)="registerLoan()">
+      <mat-icon>assignment</mat-icon>
+      Register Loan
+    </button>
+    <button mat-raised-button color="accent" *ngIf="canRegisterReturn()" (click)="registerReturn()">
+      <mat-icon>assignment_return</mat-icon>
+      Register Return
+    </button>
+    <button mat-raised-button color="accent" *ngIf="canExtendLoan()" (click)="extendLoan()">
+      <mat-icon>update</mat-icon>
+      Extend Loan
+    </button>
+    <button mat-raised-button color="primary" *ngIf="isAdmin" (click)="editArticle()">
+      <mat-icon>edit</mat-icon>
+      Modify Article
+    </button>
+    <button mat-raised-button color="warn" *ngIf="isAdmin" (click)="deleteArticle()">
+      <mat-icon>delete</mat-icon>
+      Delete Article
+    </button>
+    <button mat-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+      {{ buttonText }}
+    </button>
+  </mat-card-actions>
+</mat-card>
+<ng-container *ngIf="isAdmin && isUserSelected && selectedUser">
+  <mat-card class="user-section">
+    <mat-card-header>
+      <mat-card-title>Selected User</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p><strong>Name:</strong> {{ selectedUser.name }}</p>
+      <p><strong>Email:</strong> {{ selectedUser.email }}</p>
+    </mat-card-content>
+  </mat-card>
+</ng-container>
 
-  <button *ngIf="isAdmin" (click)="editArticle()">Modify Article</button>
-  <button *ngIf="isAdmin" (click)="deleteArticle()">Delete Article</button>
+<ng-container *ngIf="article && isAdmin && (article.state === 'BOOKED' || article.state === 'ONLOANBOOKED')">
+  <mat-card class="user-section">
+    <mat-card-header>
+      <mat-card-title>Booking User</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p *ngIf="bookingUser"><strong>Name:</strong> {{ bookingUser.name }}</p>
+      <p *ngIf="bookingUser"><strong>Email:</strong> {{ bookingUser.email }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary" *ngIf="bookingUser" (click)="goToUserDashboard(bookingUser!.id)">
+        <mat-icon>dashboard</mat-icon>
+        Go to Dashboard
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</ng-container>
 
-  <button (click)="goBack()" class="back-button">{{ buttonText }}</button>
+<ng-container *ngIf="article && isAdmin && (article.state === 'ONLOAN' || article.state === 'ONLOANBOOKED')">
+  <mat-card class="user-section">
+    <mat-card-header>
+      <mat-card-title>Loaning User</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p *ngIf="loaningUser"><strong>Name:</strong> {{ loaningUser.name }}</p>
+      <p *ngIf="loaningUser"><strong>Email:</strong> {{ loaningUser.email }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary" *ngIf="loaningUser" (click)="goToUserDashboard(loaningUser!.id)">
+        <mat-icon>dashboard</mat-icon>
+        Go to Dashboard
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</ng-container>
 
-  <div *ngIf="isAdmin && isUserSelected" class="selected-user-section">
-    <h3>Selected User</h3>
-    <div class="user-info">
-      <div class="user-details">
-        <p><strong>Name:</strong> {{ selectedUser!.name }}</p>
-        <p><strong>Email:</strong> {{ selectedUser!.email }}</p>
-      </div>
-    </div>
-  </div>
+<mat-card class="article-details" *ngIf="!article">
+  <mat-card-content>
+    <p>Article not found.</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Search
+    </button>
+  </mat-card-actions>
+</mat-card>
 
-  <div *ngIf="isAdmin && (article.state === 'BOOKED' || article.state === 'ONLOANBOOKED')" class="booking-user-section">
-    <h3>Booking User</h3>
-    <div class="user-info">
-      <div class="user-details">
-        <p *ngIf="bookingUser"><strong>Name:</strong> {{ bookingUser.name }}</p>
-        <p *ngIf="bookingUser"><strong>Email:</strong> {{ bookingUser.email }}</p>
-      </div>
-      <button *ngIf="bookingUser" (click)="goToUserDashboard(bookingUser!.id)" class="dashboard-button">Go to Dashboard</button>
-    </div>
-  </div>
-
-  <div *ngIf="isAdmin && (article.state === 'ONLOAN' || article.state === 'ONLOANBOOKED')" class="loaning-user-section">
-    <h3>Loaning User</h3>
-    <div class="user-info">
-      <div class="user-details">
-        <p *ngIf="loaningUser"><strong>Name:</strong> {{ loaningUser.name }}</p>
-        <p *ngIf="loaningUser"><strong>Email:</strong> {{ loaningUser.email }}</p>
-      </div>
-      <button *ngIf="loaningUser" (click)="goToUserDashboard(loaningUser!.id)" class="dashboard-button">Go to Dashboard</button>
-    </div>
-  </div>
+<div *ngIf="errorMessage" class="error-message">
+  <mat-card>
+    <mat-card-content>
+      <p>{{ errorMessage }}</p>
+    </mat-card-content>
+  </mat-card>
 </div>
 
-<div class="article-details" *ngIf="!article">
-  <p>Article not found.</p>
-  <button (click)="goBack()" class="back-button">Back to Search</button>
-</div>
-
-<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+<mat-spinner *ngIf="!article && !errorMessage"></mat-spinner>

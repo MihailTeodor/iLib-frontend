@@ -1,13 +1,13 @@
-<div class="app-header">
-    <span class="header-title">ILib</span>
-    
-    <div class="current-backend">
-      Current Backend: {{ currentBackend }}
-    </div>
-    
-    <div class="header-buttons">
-      <button (click)="goHome()">Back to Dashboard</button>
-      <button (click)="logout()">Logout</button>
-    </div>
-  </div>
-  
+<mat-toolbar color="primary" class="app-header">
+  <span class="header-title">ILib</span>
+  <span class="current-backend">Current Backend: {{ currentBackend }}</span>
+  <span class="spacer"></span>
+  <button mat-button (click)="goHome()" *ngIf="!isLoginPage">
+    <mat-icon>dashboard</mat-icon>
+    Back to Dashboard
+  </button>
+  <button mat-button (click)="logout()" *ngIf="!isLoginPage">
+    <mat-icon>exit_to_app</mat-icon>
+    Logout
+  </button>
+</mat-toolbar>

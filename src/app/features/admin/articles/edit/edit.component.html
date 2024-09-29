@@ -1,85 +1,95 @@
-<div class="edit-article-form">
+<mat-card class="edit-article-form">
   <h2>Edit Article</h2>
-
-  <!-- Legend for required fields -->
-  <p class="required-legend">Fields marked with <span class="required">*</span> are mandatory.</p>
-
   <form [formGroup]="editArticleForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Type</mat-label>
+      <input matInput formControlName="type" type="text" readonly />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" type="text" />
+      <mat-error *ngIf="editArticleForm.get('title')?.invalid && editArticleForm.get('title')?.touched">
+        Title is required.
+      </mat-error>
+    </mat-form-field>
+    <ng-container *ngIf="showBookFields()">
+      <mat-form-field appearance="fill">
+        <mat-label>Author</mat-label>
+        <input matInput formControlName="author" type="text" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>ISBN</mat-label>
+        <input matInput formControlName="isbn" type="text" />
+      </mat-form-field>
+    </ng-container>
 
-    <label for="type">Type:</label>
-    <input id="type" formControlName="type" type="text" readonly />
-    <div *ngIf="editArticleForm.get('type')?.invalid && editArticleForm.get('type')?.touched" class="error">
-      Type is required.
-    </div>
-
-    <label for="title">Title: <span class="required">*</span></label>
-    <input id="title" formControlName="title" type="text" />
-    <div *ngIf="editArticleForm.get('title')?.invalid && editArticleForm.get('title')?.touched" class="error">
-      Title is required.
-    </div>
-
-    <!-- Conditional Fields Based on Type -->
-    <div *ngIf="showBookFields()">
-      <label for="author">Author:</label>
-      <input id="author" formControlName="author" type="text" />
-
-      <label for="isbn">ISBN:</label>
-      <input id="isbn" formControlName="isbn" type="text" />
-    </div>
-
-    <div *ngIf="showMagazineFields()">
-      <label for="issueNumber">Issue Number:</label>
-      <input id="issueNumber" formControlName="issueNumber" type="number" />
-
-      <label for="issn">ISSN:</label>
-      <input id="issn" formControlName="issn" type="text" />
-    </div>
-
-    <div *ngIf="showMovieDvdFields()">
-      <label for="director">Director:</label>
-      <input id="director" formControlName="director" type="text" />
-
-      <label for="isan">ISAN:</label>
-      <input id="isan" formControlName="isan" type="text" />
-    </div>
-
-    <!-- Common Fields -->
-    <label for="location">Location: <span class="required">*</span></label>
-    <input id="location" formControlName="location" type="text" />
-    <div *ngIf="editArticleForm.get('location')?.invalid && editArticleForm.get('location')?.touched" class="error">
-      Location is required.
-    </div>
-
-    <label for="yearEdition">Year of Edition: <span class="required">*</span></label>
-    <input id="yearEdition" formControlName="yearEdition" type="date" />
-    <div *ngIf="editArticleForm.get('yearEdition')?.invalid && editArticleForm.get('yearEdition')?.touched" class="error">
-      Year of Edition is required and cannot be in the future.
-    </div>
-
-    <label for="publisher">Publisher: <span class="required">*</span></label>
-    <input id="publisher" formControlName="publisher" type="text" />
-    <div *ngIf="editArticleForm.get('publisher')?.invalid && editArticleForm.get('publisher')?.touched" class="error">
-      Publisher is required.
-    </div>
-
-    <label for="genre">Genre: <span class="required">*</span></label>
-    <input id="genre" formControlName="genre" type="text" />
-    <div *ngIf="editArticleForm.get('genre')?.invalid && editArticleForm.get('genre')?.touched" class="error">
-      Genre is required.
-    </div>
-
-    <label for="state">State:</label>
-    <select id="state" formControlName="state">
-      <option *ngFor="let state of articleStates" [value]="state">{{ state }}</option>
-    </select>
-
-    <label for="description">Description:</label>
-    <textarea id="description" formControlName="description"></textarea>
-
-    <!-- Submit Button -->
-    <button type="submit" [disabled]="editArticleForm.invalid">Update Article</button>
+    <ng-container *ngIf="showMagazineFields()">
+      <mat-form-field appearance="fill">
+        <mat-label>Issue Number</mat-label>
+        <input matInput formControlName="issueNumber" type="number" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>ISSN</mat-label>
+        <input matInput formControlName="issn" type="text" />
+      </mat-form-field>
+    </ng-container>
+    <ng-container *ngIf="showMovieDvdFields()">
+      <mat-form-field appearance="fill">
+        <mat-label>Director</mat-label>
+        <input matInput formControlName="director" type="text" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>ISAN</mat-label>
+        <input matInput formControlName="isan" type="text" />
+      </mat-form-field>
+    </ng-container>
+    <mat-form-field appearance="fill">
+      <mat-label>Location</mat-label>
+      <input matInput formControlName="location" type="text" />
+      <mat-error *ngIf="editArticleForm.get('location')?.invalid && editArticleForm.get('location')?.touched">
+        Location is required.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Year of Edition</mat-label>
+      <input matInput formControlName="yearEdition" [matDatepicker]="picker" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker startView="multi-year" [startAt]="startYear"></mat-datepicker>
+      <mat-error *ngIf="editArticleForm.get('yearEdition')?.invalid && editArticleForm.get('yearEdition')?.touched">
+        Year of Edition is required and cannot be in the future.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Publisher</mat-label>
+      <input matInput formControlName="publisher" type="text" />
+      <mat-error *ngIf="editArticleForm.get('publisher')?.invalid && editArticleForm.get('publisher')?.touched">
+        Publisher is required.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Genre</mat-label>
+      <input matInput formControlName="genre" type="text" />
+      <mat-error *ngIf="editArticleForm.get('genre')?.invalid && editArticleForm.get('genre')?.touched">
+        Genre is required.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>State</mat-label>
+      <mat-select formControlName="state">
+        <mat-option *ngFor="let state of articleStates" [value]="state">{{ state }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" [disabled]="editArticleForm.invalid">
+      <mat-icon>save</mat-icon>
+      Update Article
+    </button>
+    <button mat-button type="button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back
+    </button>
   </form>
-
-  <!-- Back Button -->
-  <button (click)="goBack()" class="back-button">Back</button>
-</div>
+</mat-card>

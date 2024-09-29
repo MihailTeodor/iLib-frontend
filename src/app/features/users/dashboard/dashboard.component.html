@@ -1,76 +1,91 @@
-<div class="user-dashboard" *ngIf="userInfo">
-  <h1>Welcome, {{ userInfo.name }} {{ userInfo.surname }}</h1>
+<mat-card class="user-dashboard" *ngIf="userInfo">
+  <mat-card-title>Welcome, {{ userInfo.name }} {{ userInfo.surname }}</mat-card-title>
+  <mat-card-content>
+    <div class="user-details">
+      <p><strong>Email:</strong> {{ userInfo.email }}</p>
+      <p><strong>Telephone Number:</strong> {{ userInfo.telephoneNumber }}</p>
+      <p *ngIf="userInfo.address"><strong>Address:</strong> {{ userInfo.address }}</p>
+    </div>
 
-  <div class="user-details">
-    <p><strong>Email:</strong> {{ userInfo.email }}</p>
-    <p><strong>Telephone Number:</strong> {{ userInfo.telephoneNumber }}</p>
-    <p *ngIf="userInfo.address"><strong>Address:</strong> {{ userInfo.address }}</p>
-  </div>
-
-    <div *ngIf="loans.length == 0">
-      <h2>No Loans associated to this user!</h2>
-    </div>  
-
-    <div *ngIf="loans.length > 0">
-    <h2>Your Loans</h2>
-    <ul>
-      <li *ngFor="let loan of loans">
-        <button class="booking-button" (click)="goToArticleDetails(loan.articleId)">
-          <strong>{{ loan.articleTitle }}</strong>
+    <mat-tab-group>
+      <mat-tab label="Loans">
+        <div *ngIf="loans.length === 0">
+          <h2>No Loans associated with this user!</h2>
+        </div>
+        <div *ngIf="loans.length > 0">
+          <mat-list>
+            <mat-list-item *ngFor="let loan of loans">
+              <div class="loan-item">
+                <button mat-button color="primary" (click)="goToArticleDetails(loan.articleId)">
+                  {{ loan.articleTitle }}
+                </button>
+                <span class="loan-status">
+                  <span *ngIf="isLoanActive(loan)">
+                    Due on {{ loan.dueDate | date }}
+                  </span>
+                  <span *ngIf="!isLoanActive(loan)">
+                    {{ loan.state }}
+                  </span>
+                </span>
+              </div>
+            </mat-list-item>
+          </mat-list>
+          <mat-paginator
+            *ngIf="showAllLoans && totalLoansResults > maxLoansPerPage"
+            [length]="totalLoansResults"
+            [pageSize]="maxLoansPerPage"
+            [pageSizeOptions]="[maxLoansPerPage]"
+            (page)="onLoanPageChange($event)">
+          </mat-paginator>
+        </div>
+        <button *ngIf="userInfo.totalLoans > maxLoansPerPage" mat-button (click)="toggleLoanHistory()">
+          {{ showAllLoans ? 'Hide History' : 'Show History' }}
         </button>
-        <span *ngIf="isLoanActive(loan)">
-          Due on {{ loan.dueDate | date }}
-        </span>
-        <span *ngIf="!isLoanActive(loan)">
-          {{ loan.state }}
-        </span>
-      </li>
-    </ul>
+      </mat-tab>
 
-    <div class="pagination-controls" *ngIf="showAllLoans && totalLoansPages > 1">
-      <button (click)="previousLoanPage()" [disabled]="currentLoansPage === 1">Previous</button>
-      <span>Page {{ currentLoansPage }} of {{ totalLoansPages }}</span>
-      <button (click)="nextLoanPage()" [disabled]="currentLoansPage === totalLoansPages">Next</button>
-    </div>
-  </div>
-
-  <div *ngIf="bookings.length == 0">
-    <h2>No Bookings associated to this user!</h2>
-  </div>  
-
-  <div *ngIf="bookings.length > 0">
-    <h2>Your Bookings</h2>
-    <ul>
-      <li *ngFor="let booking of bookings">
-        <button class="booking-button" (click)="goToArticleDetails(booking.bookedArticleId)">
-          <strong>{{ booking.bookedArticleTitle }}</strong>
-        </button>  
-        <span *ngIf="isBookingActive(booking)">
-          Reserved until {{ booking.bookingEndDate | date }}
-        </span>
-        <span *ngIf="!isBookingActive(booking)">
-          {{ booking.state }} 
-        </span> 
-      </li>
-    </ul>
-
-    <div class="pagination-controls" *ngIf="showAllBookings && totalBookingPages > 1">
-      <button (click)="previousBookingPage()" [disabled]="currentBookingsPage === 1">Previous</button>
-      <span>Page {{ currentBookingsPage }} of {{ totalBookingPages }}</span>
-      <button (click)="nextBookingPage()" [disabled]="currentBookingsPage === totalBookingPages">Next</button>
-    </div>
-  </div>
-
-  <button *ngIf="userInfo.totalBookings > maxBookingsPerPage" (click)="toggleBookingHistory()">
-    {{ showAllBookings ? 'Hide History' : 'Show History' }}
-  </button>
-
-  <button *ngIf="userInfo.totalLoans > maxLoansPerPage" (click)="toggleLoanHistory()">
-    {{ showAllLoans ? 'Hide History' : 'Show History' }}
-  </button>
-
-  <button (click)="searchArticles()">Search Articles</button>
-</div>
+      <mat-tab label="Bookings">
+        <div *ngIf="bookings.length === 0">
+          <h2>No Bookings associated with this user!</h2>
+        </div>
+        <div *ngIf="bookings.length > 0">
+          <mat-list>
+            <mat-list-item *ngFor="let booking of bookings">
+              <div class="booking-item">
+                <button mat-button color="primary" (click)="goToArticleDetails(booking.bookedArticleId)">
+                  {{ booking.bookedArticleTitle }}
+                </button>
+                <span class="booking-status">
+                  <span *ngIf="isBookingActive(booking)">
+                    Reserved until {{ booking.bookingEndDate | date }}
+                  </span>
+                  <span *ngIf="!isBookingActive(booking)">
+                    {{ booking.state }}
+                  </span>
+                </span>
+              </div>
+            </mat-list-item>
+          </mat-list>
+          <mat-paginator
+            *ngIf="showAllBookings && totalBookingResults > maxBookingsPerPage"
+            [length]="totalBookingResults"
+            [pageSize]="maxBookingsPerPage"
+            [pageSizeOptions]="[maxBookingsPerPage]"
+            (page)="onBookingPageChange($event)">
+          </mat-paginator>
+        </div>
+        <button *ngIf="userInfo.totalBookings > maxBookingsPerPage" mat-button (click)="toggleBookingHistory()">
+          {{ showAllBookings ? 'Hide History' : 'Show History' }}
+        </button>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="searchArticles()">
+      <mat-icon>search</mat-icon>
+      Search Articles
+    </button>
+  </mat-card-actions>
+</mat-card>
 
 <div *ngIf="errorMessage">
   <p class="error">{{ errorMessage }}</p>

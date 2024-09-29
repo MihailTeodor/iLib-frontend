@@ -2,56 +2,37 @@
   max-width: 400px;
   margin: 50px auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .switch-backend-button {
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .current-backend {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+  }
 }
 
-h2 {
-  text-align: center;
-}
-
-label {
-  display: block;
-  margin-top: 10px;
-}
-
-input {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  box-sizing: border-box;
-}
-
-/* Shared button style for both login and switch backend buttons */
-button, .switch-backend-button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-button:hover, .switch-backend-button:hover {
-  background-color: #0056b3;
-}
-
-button:disabled {
-  background-color: #ccc;
-}
-
-.error {
-  color: red;
-  text-align: center;
-}
-
-.current-backend {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #555;
-  text-align: center;
+@media (max-width: 600px) {
+  .login-container {
+    margin: 20px auto;
+  }
 }
