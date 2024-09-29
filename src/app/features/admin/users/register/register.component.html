@@ -1,44 +1,63 @@
-<div class="register-user-form">
-    <h2>Register New User</h2>
-  
-    <!-- Legend for required fields -->
-    <p class="required-legend">Fields marked with <span class="required">*</span> are mandatory.</p>
-  
-    <form [formGroup]="registerUserForm" (ngSubmit)="onSubmit()">
-      <label for="email">Email: <span class="required">*</span></label>
-      <input id="email" formControlName="email" type="email" />
-      <div *ngIf="registerUserForm.get('email')?.invalid && registerUserForm.get('email')?.touched" class="error">
+<mat-card class="register-user-form">
+  <h2>Register New User</h2>
+
+  <form [formGroup]="registerUserForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" />
+      <mat-error *ngIf="registerUserForm.get('email')?.invalid && registerUserForm.get('email')?.touched">
         Email is required and must be a valid email.
-      </div>
-  
-      <label for="plainPassword">Password: <span class="required">*</span></label>
-      <input id="plainPassword" formControlName="plainPassword" type="password" />
-      <div *ngIf="registerUserForm.get('plainPassword')?.invalid && registerUserForm.get('plainPassword')?.touched" class="error">
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="plainPassword" type="password" />
+      <mat-error *ngIf="registerUserForm.get('plainPassword')?.invalid && registerUserForm.get('plainPassword')?.touched">
         Password is required.
-      </div>
-  
-      <label for="name">Name: <span class="required">*</span></label>
-      <input id="name" formControlName="name" type="text" />
-      <div *ngIf="registerUserForm.get('name')?.invalid && registerUserForm.get('name')?.touched" class="error">
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" type="text" />
+      <mat-error *ngIf="registerUserForm.get('name')?.invalid && registerUserForm.get('name')?.touched">
         Name is required.
-      </div>
-  
-      <label for="surname">Surname: <span class="required">*</span></label>
-      <input id="surname" formControlName="surname" type="text" />
-      <div *ngIf="registerUserForm.get('surname')?.invalid && registerUserForm.get('surname')?.touched" class="error">
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Surname</mat-label>
+      <input matInput formControlName="surname" type="text" />
+      <mat-error *ngIf="registerUserForm.get('surname')?.invalid && registerUserForm.get('surname')?.touched">
         Surname is required.
-      </div>
-  
-      <label for="address">Address:</label>
-      <input id="address" formControlName="address" type="text" />
-  
-      <label for="telephoneNumber">Telephone Number: <span class="required">*</span></label>
-      <input id="telephoneNumber" formControlName="telephoneNumber" type="text" />
-      <div *ngIf="registerUserForm.get('telephoneNumber')?.invalid && registerUserForm.get('telephoneNumber')?.touched" class="error">
-        Telephone number is required and must be exactly 10 digits.
-      </div>
-  
-      <button type="submit" [disabled]="registerUserForm.invalid">Register User</button>
-    </form>
-  </div>
-  
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Address</mat-label>
+      <input matInput formControlName="address" type="text" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Telephone Number</mat-label>
+      <input matInput formControlName="telephoneNumber" type="text" />
+      <mat-error
+        *ngIf="
+          registerUserForm.get('telephoneNumber')?.errors?.['digitsOnly'] &&
+          registerUserForm.get('telephoneNumber')?.touched
+        "
+      >
+        Telephone number must contain only digits.
+      </mat-error>
+      <mat-error
+        *ngIf="
+          (registerUserForm.get('telephoneNumber')?.errors?.['minlength'] ||
+            registerUserForm.get('telephoneNumber')?.errors?.['maxlength']) &&
+          registerUserForm.get('telephoneNumber')?.touched
+        "
+      >
+        Telephone number must be exactly 10 digits.
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" [disabled]="registerUserForm.invalid">
+      <mat-icon>person_add</mat-icon>
+      Register User
+    </button>
+  </form>
+</mat-card>

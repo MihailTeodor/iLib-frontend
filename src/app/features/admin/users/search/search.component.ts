@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UsersService } from '../../../users/users.service';
 import { UserDTO } from '../../../../shared/models/user.dto';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-search-users',
   templateUrl: './search.component.html',
@@ -11,14 +12,18 @@ import { UserDTO } from '../../../../shared/models/user.dto';
 export class SearchUsersComponent {
   searchForm: FormGroup;
   users: UserDTO[] = [];
-  errorMessage: string | null = null;
   totalResults: number = 0;
   totalPages: number = 1;
   currentPage: number = 1;
   formCollapsed: boolean = false;
   resultsPerPageOptions = [5, 10, 15, 20];
 
-  constructor(private fb: FormBuilder, private usersService: UsersService) {
+  constructor(
+    private fb: FormBuilder,
+    private usersService: UsersService,
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) {
     this.searchForm = this.fb.group({
       name: [''],
       surname: [''],
@@ -31,14 +36,9 @@ export class SearchUsersComponent {
 
   ngOnInit(): void {
     if (history.state.searchFormData && history.state.users) {
-      // Restore form data
       this.searchForm.patchValue(history.state.searchFormData);
-
-      // Restore users and results
       this.users = history.state.users;
       this.totalResults = this.users.length;
-
-      // Automatically collapse the form if results exist, otherwise expand it
       this.formCollapsed = this.totalResults > 0;
     }
   }
@@ -50,17 +50,25 @@ export class SearchUsersComponent {
         this.totalResults = response.totalResults;
         this.totalPages = response.totalPages;
         this.currentPage = response.pageNumber;
-        this.errorMessage = null;
         this.formCollapsed = true;
       },
       error: (error) => {
         if (error.status === 404 && error.error.error === 'Search has given no results!') {
           this.users = [];
           this.totalResults = 0;
-          this.errorMessage = 'No users found. Please try a different search.';
+          this.snackBar.open('No users found. Please try a different search.', 'Close', {
+            duration: 5000,
+          });
+        } if (error.status === 401) {
+          this.snackBar.open('Session expired. Please log in again.', 'Close', {
+            duration: 5000,
+          });
+          this.router.navigate(['/auth/login']);
         } else {
           console.error('Error fetching users', error);
-          this.errorMessage = 'An error occurred during the search. Please try again.';
+          this.snackBar.open('An error occurred during the search. Please try again.', 'Close', {
+            duration: 5000,
+          });
         }
       }
     });

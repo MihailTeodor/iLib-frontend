@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { BackendService } from '../../../shared/backend.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -14,13 +15,16 @@ export class LoginComponent {
   errorMessage: string | null = null;
   environmentLabel: string = 'Switch to C# Backend';
   currentBackend: string = '';
+  hide = true;
+
 
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private backendService: BackendService
+    private backendService: BackendService,
+    private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -44,15 +48,18 @@ export class LoginComponent {
           }
         },
         error: (error) => {
+          let message = 'Login failed. Please try again.';
           if (error.status === 401) {
-            this.errorMessage = 'Invalid email or password. Please try again.';
-          } else {
-            this.errorMessage = 'Login failed. Please try again.';
+            message = 'Invalid email or password. Please try again.';
           }
+          this.snackBar.open(message, 'Close', {
+            duration: 5000,
+          });
         }
       });
     }
-  }  
+  }
+  
 
   switchBackend(): void {
     if (this.environmentLabel === 'Switch to C# Backend') {

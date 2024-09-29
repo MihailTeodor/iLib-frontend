@@ -8,6 +8,7 @@ import { UsersService } from '../../users/users.service';
 import { BookingService } from '../bookings.service';
 import { LoanService } from '../loans.service';
 import { differenceInCalendarDays } from 'date-fns';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -30,7 +31,8 @@ export class ArticleDetailComponent implements OnInit {
     private articlesService: ArticlesService,
     private usersService: UsersService,
     private bookingService: BookingService,
-    private loanService: LoanService
+    private loanService: LoanService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -76,6 +78,12 @@ export class ArticleDetailComponent implements OnInit {
         }
       },
       error: (error) => {
+        if (error.status === 401) {
+          this.snackBar.open('Session expired. Please log in again.', 'Close', {
+            duration: 5000,
+          });
+          this.router.navigate(['/auth/login']);
+        }
         this.errorMessage = 'Error fetching article details';
         this.router.navigate(['/articles/search']);
       },
@@ -93,9 +101,14 @@ export class ArticleDetailComponent implements OnInit {
           this.loaningUser = data;
         }
       },
-      error: () => {
-        this.errorMessage = `Error fetching ${userType} data`;
-      },
+      error: (error) => {
+        if (error.status === 401) {
+          this.snackBar.open('Session expired. Please log in again.', 'Close', {
+            duration: 5000,
+          });
+          this.router.navigate(['/auth/login']);
+        }        this.errorMessage = `Error fetching ${userType} data`;
+    }
     });
   }
 
@@ -104,7 +117,7 @@ export class ArticleDetailComponent implements OnInit {
   }
 
   get isUserSelected(): boolean {
-    return !this.isAdmin || history.state.userId;
+    return !this.isAdmin || !!history.state.userId;
   }
 
   selectUser(): void {
@@ -150,6 +163,12 @@ export class ArticleDetailComponent implements OnInit {
         }
       },
       error: (error) => {
+        if (error.status === 401) {
+          this.snackBar.open('Session expired. Please log in again.', 'Close', {
+            duration: 5000,
+          });
+          this.router.navigate(['/auth/login']);
+        }
         console.error('Error booking article', error);
         this.errorMessage =
           error.error.error ||
@@ -203,6 +222,12 @@ export class ArticleDetailComponent implements OnInit {
         }
       },
       error: (error) => {
+        if (error.status === 401) {
+          this.snackBar.open('Session expired. Please log in again.', 'Close', {
+            duration: 5000,
+          });
+          this.router.navigate(['/auth/login']);
+        }
         console.error('Error cancelling booking', error);
         this.errorMessage =
           error.error.error ||
@@ -237,6 +262,12 @@ export class ArticleDetailComponent implements OnInit {
           });
         },
         error: (error) => {
+          if (error.status === 401) {
+            this.snackBar.open('Session expired. Please log in again.', 'Close', {
+              duration: 5000,
+            });
+            this.router.navigate(['/auth/login']);
+          }
           console.error('Error registering loan', error);
           this.errorMessage = error.error.error || 'An error occurred while registering the loan.';
         },
@@ -269,6 +300,12 @@ export class ArticleDetailComponent implements OnInit {
           });
       },
       error: (error) => {
+        if (error.status === 401) {
+          this.snackBar.open('Session expired. Please log in again.', 'Close', {
+            duration: 5000,
+          });
+          this.router.navigate(['/auth/login']);
+        }
         console.error('Error returning article', error);
         this.errorMessage =
           error.error.error ||
@@ -301,6 +338,12 @@ export class ArticleDetailComponent implements OnInit {
           });
       },
       error: (error) => {
+        if (error.status === 401) {
+          this.snackBar.open('Session expired. Please log in again.', 'Close', {
+            duration: 5000,
+          });
+          this.router.navigate(['/auth/login']);
+        }
         console.error('Error extending loan', error);
         this.errorMessage =
           error.error.error ||
@@ -329,6 +372,12 @@ export class ArticleDetailComponent implements OnInit {
             });
           },
           error: (error) => {
+            if (error.status === 401) {
+              this.snackBar.open('Session expired. Please log in again.', 'Close', {
+                duration: 5000,
+              });
+              this.router.navigate(['/auth/login']);
+            }
             console.error('Error deleting article', error);
             alert('An error occurred while deleting the article.');
           },

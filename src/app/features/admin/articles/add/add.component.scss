@@ -2,9 +2,6 @@
   max-width: 600px;
   margin: 50px auto;
   padding: 20px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   h2 {
     text-align: center;
@@ -28,80 +25,29 @@
   form {
     display: flex;
     flex-direction: column;
-    
-    label {
-      margin-bottom: 8px;
-      font-weight: bold;
-      color: #555;
-    }
+    gap: 20px;
 
-    input, select, textarea {
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      margin-bottom: 20px;
-      font-size: 1em;
-      width: 100%;
-      box-sizing: border-box;
-
-      &:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
-      }
-    }
-
-    select {
-      background-color: white;
-    }
-
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .error {
+    .required {
       color: #e74c3c;
-      font-size: 0.9em;
-      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    mat-error {
+      font-size: 0.8em;
+      color: #e74c3c;
     }
 
     button {
-      padding: 10px 20px;
-      background-color: #007bff;
-      border: none;
-      border-radius: 4px;
-      color: white;
-      font-size: 1em;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: #0056b3;
-      }
-
-      &:disabled {
-        background-color: #bbb;
-        cursor: not-allowed;
-      }
-    }
-
-    /* Back button styling */
-    .back-dashboard-button {
       margin-top: 20px;
-      background-color: #6c757d;
-      color: white;
-      &:hover {
-        background-color: #5a6268;
+      align-self: flex-start;
+
+      mat-icon {
+        margin-right: 8px;
       }
     }
-  }
-
-  /* Styling for the form in case there are validation errors */
-  .error-message {
-    color: #e74c3c;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 1em;
   }
 }

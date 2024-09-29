@@ -1,41 +1,59 @@
-<div class="search-users-form">
+<mat-card class="search-users-form">
   <h2>Search Users</h2>
 
- <!-- Toggle button to collapse/expand the search form -->
- <button class="toggle-button" (click)="toggleForm()">
-  <span *ngIf="formCollapsed">▼ Show Search</span>
-  <span *ngIf="!formCollapsed">▲ Hide Search</span>
-</button>
+  <button mat-button (click)="toggleForm()">
+    <mat-icon>{{ formCollapsed ? 'expand_more' : 'expand_less' }}</mat-icon>
+    {{ formCollapsed ? 'Show Search' : 'Hide Search' }}
+  </button>
 
-  <form *ngIf="!formCollapsed" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
-    <label for="name">Name:</label>
-    <input id="name" formControlName="name" type="text" />
+  <mat-expansion-panel [expanded]="!formCollapsed">
+    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+      <div class="form-fields">
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" type="text" />
+        </mat-form-field>
 
-    <label for="surname">Surname:</label>
-    <input id="surname" formControlName="surname" type="text" />
+        <mat-form-field appearance="fill">
+          <mat-label>Surname</mat-label>
+          <input matInput formControlName="surname" type="text" />
+        </mat-form-field>
 
-    <label for="email">Email:</label>
-    <input id="email" formControlName="email" type="email" />
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" />
+        </mat-form-field>
 
-    <label for="telephoneNumber">Telephone Number:</label>
-    <input id="telephoneNumber" formControlName="telephoneNumber" type="text" />
-    
-    <label for="resultsPerPage">Results Per Page:</label>
-    <select id="resultsPerPage" formControlName="resultsPerPage" (change)="onResultsPerPageChange()">
-      <option *ngFor="let option of resultsPerPageOptions" [value]="option">{{ option }}</option>
-    </select>
+        <mat-form-field appearance="fill">
+          <mat-label>Telephone Number</mat-label>
+          <input matInput formControlName="telephoneNumber" type="text" />
+        </mat-form-field>
 
-    <button type="submit">Search</button>
-  </form>
+        <mat-form-field appearance="fill">
+          <mat-label>Results Per Page</mat-label>
+          <mat-select formControlName="resultsPerPage" (selectionChange)="onResultsPerPageChange()">
+            <mat-option *ngFor="let option of resultsPerPageOptions" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit">
+          <mat-icon>search</mat-icon>
+          Search
+        </button>
+      </div>
+    </form>
+  </mat-expansion-panel>
 
-  <app-user-list [users]="users" 
-                 [totalResults]="totalResults"
-                 [totalPages]="totalPages"
-                 [currentPage]="currentPage"
-                 [searchFormData]="searchForm.value"
-                 (pageChange)="goToPage($event)">
+  <app-user-list
+    [users]="users"
+    [totalResults]="totalResults"
+    [totalPages]="totalPages"
+    [currentPage]="currentPage"
+    [searchFormData]="searchForm.value"
+    (pageChange)="goToPage($event)">
   </app-user-list>
-
-  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-</div>
+</mat-card>

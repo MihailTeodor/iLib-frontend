@@ -1,39 +1,51 @@
-<div *ngIf="articles.length > 0">
-    <h3>Search Results ({{ totalResults }} results)</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Author</th>
-          <th>Publisher</th>
-          <th>Year</th>
-          <th>Type</th>
-          <th>Location</th>
-          <th>State</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let article of articles" (click)="onSelectArticle(article)">
-          <td>{{ article.title }}</td>
-          <td>{{ article.author }}</td>
-          <td>{{ article.publisher }}</td>
-          <td>{{ article.yearEdition | date: 'yyyy' }}</td>
-          <td>{{ article.type }}</td>
-          <td>{{ article.location }}</td>
-          <td>{{ article.state }}</td>
-          <td>
-            <button (click)="onSelectArticle(article)">Details</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  
-    <!-- Pagination Controls -->
-    <div class="pagination-controls" *ngIf="totalPages > 1">
-      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
-      <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
-    </div>
-  </div>
-  
+<div>
+  <h3>Search Results ({{ totalResults }} results)</h3>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+      <td mat-cell *matCellDef="let article" matTooltip="{{ article.title }}">{{ article.title }}</td>
+    </ng-container>
+    <ng-container matColumnDef="author">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Author</th>
+      <td mat-cell *matCellDef="let article" matTooltip="{{ article.author }}">{{ article.author }}</td>
+    </ng-container>
+    <ng-container matColumnDef="publisher">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Publisher</th>
+      <td mat-cell *matCellDef="let article" matTooltip="{{ article.publisher }}">{{ article.publisher }}</td>
+    </ng-container>
+    <ng-container matColumnDef="year">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Year</th>
+      <td mat-cell *matCellDef="let article">{{ article.yearEdition | date: 'yyyy' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+      <td mat-cell *matCellDef="let article">{{ article.type }}</td>
+    </ng-container>
+    <ng-container matColumnDef="location">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
+      <td mat-cell *matCellDef="let article" matTooltip="{{ article.location }}">{{ article.location }}</td>
+    </ng-container>
+    <ng-container matColumnDef="state">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>State</th>
+      <td mat-cell *matCellDef="let article">{{ article.state }}</td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let article">
+        <button mat-icon-button color="primary" (click)="onSelectArticle(article, $event)">
+          <mat-icon>info</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [length]="totalResults"
+                 [pageSize]="pageSize"
+                 [pageSizeOptions]="pageSizeOptions"
+                 [pageIndex]="currentPage - 1"
+                 (page)="onPageChange($event)">
+  </mat-paginator>
+</div>

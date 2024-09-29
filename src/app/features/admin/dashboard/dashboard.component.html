@@ -1,16 +1,24 @@
-<div class="admin-dashboard">
+<mat-card class="admin-dashboard">
   <h1>Admin Dashboard</h1>
 
-  <!-- Popup notification -->
-  <div *ngIf="showMessage" class="notification-popup">
-    <span>{{ message }}</span>
-    <button class="close-button" (click)="closeMessage()">×</button>
+  <div class="button-group">
+    <button mat-raised-button color="primary" routerLink="/admin/articles/search">
+      <mat-icon>search</mat-icon>
+      Search Articles
+    </button>
+    <button mat-raised-button color="warn" routerLink="/admin/articles/add">
+      <mat-icon>note_add</mat-icon>
+      Add Article
+    </button>
+    <button mat-raised-button color="primary" routerLink="/admin/users/search">
+      <mat-icon>people</mat-icon>
+      Search Users
+    </button>
+    <button mat-raised-button color="warn" routerLink="/admin/users/register">
+      <mat-icon>person_add</mat-icon>
+      Add User
+    </button>
   </div>
 
-  <button routerLink="/admin/articles/search">Search Articles</button>
-  <button routerLink="/admin/articles/add">Add Article</button>
-  <button routerLink="/admin/users/search">Search Users</button>
-  <button routerLink="/admin/users/register">Add User</button>
-
   <router-outlet></router-outlet>
-</div>
+</mat-card>

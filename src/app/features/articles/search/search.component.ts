@@ -1,14 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ArticlesService } from '../../../features/articles/articles.service';
 import { ArticleDTO } from '../../../shared/models/article.dto';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-articles',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchArticlesComponent {
+export class SearchArticlesComponent implements OnInit {
   searchForm: FormGroup;
   articles: ArticleDTO[] = [];
   errorMessage: string | null = null;
@@ -18,7 +21,14 @@ export class SearchArticlesComponent {
   formCollapsed: boolean = false;
   resultsPerPageOptions = [5, 10, 15, 20];
 
-  constructor(private fb: FormBuilder, private articlesService: ArticlesService) {
+  displayedColumns: string[] = ['title', 'author'];
+
+  constructor(
+    private fb: FormBuilder,
+    private articlesService: ArticlesService,
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) {
     this.searchForm = this.fb.group({
       isbn: [''],
       issn: [''],
@@ -37,19 +47,13 @@ export class SearchArticlesComponent {
 
   ngOnInit(): void {
     if (history.state.searchFormData && history.state.articles) {
-      // Restore form data
       this.searchForm.patchValue(history.state.searchFormData);
-  
-      // Restore articles and results
       this.articles = history.state.articles;
       this.totalResults = this.articles.length;
-      
-      // Automatically collapse the form if results exist, otherwise expand it
       this.formCollapsed = this.totalResults > 0;
     }
   }
-  
-  
+
   onSubmit(): void {
     this.articlesService.searchArticles(this.searchForm.value).subscribe({
       next: (response) => {
@@ -62,16 +66,22 @@ export class SearchArticlesComponent {
       },
       error: (error) => {
         if (error.status === 404 && error.error.error === 'The search has given 0 results!') {
-          // Handle the case where no results were found
           this.articles = [];
           this.totalResults = 0;
           this.errorMessage = 'No results found. Please try a different search.';
+        } else if (error.status === 401) {
+          this.snackBar.open('Session expired. Please log in again.', 'Close', {
+            duration: 5000,
+          });
+          this.router.navigate(['/auth/login']);
         } else {
-          // Handle other errors
           console.error('Error fetching articles', error);
           this.errorMessage = 'An error occurred during the search. Please try again.';
+          this.snackBar.open('An error occurred during the search.', 'Close', {
+            duration: 5000,
+          });
         }
-      }
+      },
     });
   }
 
@@ -86,5 +96,12 @@ export class SearchArticlesComponent {
 
   onResultsPerPageChange(): void {
     this.searchForm.get('pageNumber')?.setValue(1);
+    this.onSubmit();
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.searchForm.get('pageNumber')?.setValue(event.pageIndex + 1);
+    this.searchForm.get('resultsPerPage')?.setValue(event.pageSize);
+    this.onSubmit();
   }
 }

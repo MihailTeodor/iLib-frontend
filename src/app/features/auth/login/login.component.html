@@ -1,39 +1,47 @@
-<div class="login-container">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <h2>Login</h2>
-      <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-  
-      <div>
-        <label for="email">Email</label>
-        <input id="email" formControlName="email" type="email">
-        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-          <small *ngIf="loginForm.get('email')?.hasError('required')">Email is required.</small>
-          <small *ngIf="loginForm.get('email')?.hasError('email')">Invalid email format.</small>
-        </div>
-      </div>
-  
-      <div>
-        <label for="password">Password</label>
-        <input id="password" formControlName="password" type="password">
-        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-          <small *ngIf="loginForm.get('password')?.hasError('required')">Password is required.</small>
-          <small *ngIf="loginForm.get('password')?.hasError('minlength')">
-            Password must be at least 6 characters long.
-          </small>
-          <small *ngIf="loginForm.get('password')?.hasError('maxlength')">
-            Password cannot be longer than 20 characters.
-          </small>
-        </div>
-      </div>
-  
-      <button type="submit" [disabled]="loginForm.invalid">Login</button>
-    </form>
+<mat-card class="login-container">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <h2>Login</h2>
 
-      <!-- Backend Switch Button -->
-    <button (click)="switchBackend()" class="switch-backend-button">{{ environmentLabel }}</button>
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput id="email" formControlName="email" type="email">
+      <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+        <span *ngIf="loginForm.get('email')?.hasError('required')">Email is required.</span>
+        <span *ngIf="loginForm.get('email')?.hasError('email')">Invalid email format.</span>
+      </mat-error>
+    </mat-form-field>
 
-    <div class="current-backend">
-      Current Backend: {{ currentBackend }}
-    </div>
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Password</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" id="password" formControlName="password">
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        tabindex="-1"
+        (click)="hide = !hide"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide"
+      >
+        <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        <span *ngIf="loginForm.get('password')?.hasError('required')">Password is required.</span>
+        <span *ngIf="loginForm.get('password')?.hasError('minlength')">
+          Password must be at least 6 characters long.
+        </span>
+        <span *ngIf="loginForm.get('password')?.hasError('maxlength')">
+          Password cannot be longer than 20 characters.
+        </span>
+      </mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
+  </form>
+
+  <button mat-button (click)="switchBackend()" class="switch-backend-button">{{ environmentLabel }}</button>
+
+  <div class="current-backend">
+    Current Backend: {{ currentBackend }}
   </div>
-  
+</mat-card>

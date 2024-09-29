@@ -1,146 +1,57 @@
 .search-users-form {
-    max-width: 800px;
-    margin: 30px auto;
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-  
-    button {
-      margin-bottom: 10px;
-      margin-right: 10px;
-      cursor: pointer;
-    }
-  
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-  
-      th, td {
-        padding: 10px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-      }
-  
-      th {
-        background-color: #007bff;
-        color: white;
-      }
-  
-      td {
-        background-color: #f9f9f9;
-      }
-  
-      tr:hover {
-        background-color: #f1f1f1;
-      }
-    }
-  
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #333;
-    }
-  
-    form {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 20px;
-  
-      label {
-        font-weight: bold;
-      }
-  
-      button {
-        grid-column: span 2;
-        padding: 10px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-  
-        &:hover {
-          background-color: #0056b3;
-        }
-      }
-    }
-  
-    .pagination-controls {
-      text-align: center;
-      margin-top: 20px;
-  
-      button {
-        margin: 0 10px;
-        padding: 10px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-  
-        &:hover {
-          background-color: #0056b3;
-        }
-      }
-    }
-  
-    .error-message {
-      color: red;
-      text-align: center;
-      margin-top: 20px;
-    }
-  
-    #resultsPerPage {
-        margin-top: 20px;
-      }
+  max-width: 100%;
+  margin: 30px auto;
+  padding: 20px;
 
-       /* Back to Admin Dashboard button */
-  .back-dashboard-button {
-    margin: 10px;
-    padding: 10px 20px;
-    background-color: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-    &:hover {
-      background-color: #5a6268;
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .form-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    mat-form-field {
+      flex: 1 1 45%;
+      min-width: 200px;
     }
   }
 
-  button.toggle-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 15px;
-    background-color: #007bff;
-    color: white;
-    font-size: 1rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  .form-actions {
+    text-align: center;
+    margin-top: 20px;
+
+    button {
+      min-width: 150px;
+    }
+  }
+
+  button[mat-button] {
     margin-bottom: 15px;
-    
-    &:hover {
-      background-color: #0056b3;
-    }
+    display: flex;
+    align-items: center;
 
-    &:focus {
-      outline: none;
-      box-shadow: 0 0 4px rgba(0, 123, 255, 0.6);
+    mat-icon {
+      margin-right: 8px;
     }
+  }
 
-    /* Adding the arrow span for better visual clarity */
-    span {
-      margin-left: 8px;
+  .error-message {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 600px) {
+    .form-fields {
+      flex-direction: column;
+
+      mat-form-field {
+        width: 100%;
+      }
     }
   }
 }
-    
-  
