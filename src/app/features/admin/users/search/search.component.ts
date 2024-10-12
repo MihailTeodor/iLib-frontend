@@ -59,7 +59,7 @@ export class SearchUsersComponent {
           this.snackBar.open('No users found. Please try a different search.', 'Close', {
             duration: 5000,
           });
-        } if (error.status === 401) {
+        } else if (error.status === 401) {
           this.snackBar.open('Session expired. Please log in again.', 'Close', {
             duration: 5000,
           });

@@ -14,7 +14,6 @@ import { Router } from '@angular/router';
 export class SearchArticlesComponent implements OnInit {
   searchForm: FormGroup;
   articles: ArticleDTO[] = [];
-  errorMessage: string | null = null;
   totalResults: number = 0;
   totalPages: number = 1;
   currentPage: number = 1;
@@ -61,14 +60,16 @@ export class SearchArticlesComponent implements OnInit {
         this.totalResults = response.totalResults;
         this.totalPages = response.totalPages;
         this.currentPage = response.pageNumber;
-        this.errorMessage = null;
         this.formCollapsed = true;
       },
       error: (error) => {
         if (error.status === 404 && error.error.error === 'The search has given 0 results!') {
           this.articles = [];
           this.totalResults = 0;
-          this.errorMessage = 'No results found. Please try a different search.';
+          this.snackBar.open('No results found. Please try a different search.', 'Close', {
+            duration: 5000,
+          });
+
         } else if (error.status === 401) {
           this.snackBar.open('Session expired. Please log in again.', 'Close', {
             duration: 5000,
@@ -76,7 +77,6 @@ export class SearchArticlesComponent implements OnInit {
           this.router.navigate(['/auth/login']);
         } else {
           console.error('Error fetching articles', error);
-          this.errorMessage = 'An error occurred during the search. Please try again.';
           this.snackBar.open('An error occurred during the search.', 'Close', {
             duration: 5000,
           });

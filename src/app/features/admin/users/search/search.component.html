@@ -49,6 +49,7 @@
   </mat-expansion-panel>
 
   <app-user-list
+    *ngIf="users.length > 0"
     [users]="users"
     [totalResults]="totalResults"
     [totalPages]="totalPages"
