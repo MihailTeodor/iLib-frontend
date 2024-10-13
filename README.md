@@ -1,15 +1,14 @@
 
 # iLib - A Library Web Application
 
-The **iLib** frontend is a user interface built with Angular that interacts with two backend systems (one in Java and one in C#) to manage a library’s inventory, user loans, bookings, and alerts. This application provides an easy-to-use interface for citizens and administrators to interact with the library’s resources.
+The **iLib** frontend is a user interface built with Angular that interacts with two backend systems (one in Java and one in C#) to manage a library’s inventory, user loans and bookings. This application provides an easy-to-use interface for citizens and administrators to interact with the library’s resources.
 
 ## Features
 
 ### Citizen User Features
 - **Search Articles**: Search for books, magazines, and DVDs.
-- **Manage Loans**: View and extend current loans.
 - **Book Articles**: Book available articles.
-- **View Loan History**: Check the history of previously borrowed articles.
+- **View Loan and Booking History**: Check the history of previously borrowed or booked articles.
 
 ### Administrator Features
 - **Manage Articles**: Add, modify, or remove articles from the library catalogue.
@@ -22,7 +21,6 @@ The **iLib** frontend is a user interface built with Angular that interacts with
 - **Backend Integration**: Angular interacts with two backends—one using Jakarta EE (Java) and one using .NET (C#) via RESTful APIs.
 - **Authentication**: JWT-based authentication to ensure secure access to the system.
 - **Routing**: Angular Router for navigating between different parts of the application.
-- **Responsive Design**: The frontend is responsive, allowing it to be accessed from a wide range of devices.
 
 ## Setup Instructions
 
