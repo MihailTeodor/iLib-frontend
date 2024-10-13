@@ -1,27 +1,74 @@
-# ILib
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.3.
+# iLib - A Library Web Application
 
-## Development server
+The **iLib** frontend is a user interface built with Angular that interacts with two backend systems (one in Java and one in C#) to manage a library’s inventory, user loans, bookings, and alerts. This application provides an easy-to-use interface for citizens and administrators to interact with the library’s resources.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Features
 
-## Code scaffolding
+### Citizen User Features
+- **Search Articles**: Search for books, magazines, and DVDs.
+- **Manage Loans**: View and extend current loans.
+- **Book Articles**: Book available articles.
+- **View Loan History**: Check the history of previously borrowed articles.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Administrator Features
+- **Manage Articles**: Add, modify, or remove articles from the library catalogue.
+- **User Management**: Register new users, modify user information, and consult user histories.
+- **Manage Loans**: Register new loans, returns, and extend loans on behalf of citizens.
 
-## Build
+## Technologies Used
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- **Frontend Framework**: Angular18 (TypeScript, HTML, SCSS)
+- **Backend Integration**: Angular interacts with two backends—one using Jakarta EE (Java) and one using .NET (C#) via RESTful APIs.
+- **Authentication**: JWT-based authentication to ensure secure access to the system.
+- **Routing**: Angular Router for navigating between different parts of the application.
+- **Responsive Design**: The frontend is responsive, allowing it to be accessed from a wide range of devices.
 
-## Running unit tests
+## Setup Instructions
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Prerequisites
+Before setting up the frontend application, make sure you have the following tools installed:
+- **Node.js** (v12 or later)
+- **npm** (Node package manager)
+- **Angular CLI** (Install globally using: `npm install -g @angular/cli`)
 
-## Running end-to-end tests
+### Installation
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/MihailTeodor/iLib-frontend.git
+   cd iLib-frontend
+   ```
 
-## Further help
+2. **Install dependencies**:
+   Run the following command to install the required npm packages:
+   ```bash
+   npm install
+   ```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### Running the Application
+
+   To start a local development server, run:
+   ```bash
+   ng serve
+   ```
+   This will start the Angular development server and host the application at:
+   ```
+   http://localhost:4200/
+   ```
+
+### Backend Configuration
+
+By default, the application is configured to interact with two backend APIs: one in **Java** and one in **C#**. The backend base URLs can be configured in the `backend.service.ts` service:
+
+```typescript
+  switchToJavaBackend(): void {
+    this.currentBackendNameSubject.next("Java Backend");
+    this.currentBackendUrlSubject.next('http://localhost:8080/iLib/v1');
+  }
+
+  switchToCsharpBackend(): void {
+    this.currentBackendNameSubject.next("C# Backend");
+    this.currentBackendUrlSubject.next('http://localhost:5062/iLib/v1');
+  }
+```
