@@ -81,13 +81,13 @@
     </form>
   </mat-expansion-panel>
 
-  <app-article-list
-    *ngIf="articles.length > 0"
-    [articles]="articles"
-    [totalResults]="totalResults"
-    [totalPages]="totalPages"
-    [currentPage]="currentPage"
-    [searchFormData]="searchForm.value"
-    (pageChange)="goToPage($event)"
-  ></app-article-list>
+<app-article-list
+  *ngIf="articles.length > 0"
+  [articles]="articles"
+  [totalResults]="totalResults"
+  [currentPage]="searchForm.get('pageNumber')?.value"
+  [pageSize]="searchForm.get('resultsPerPage')?.value"
+  (pageChange)="goToPage($event)">
+</app-article-list>
+
 </mat-card>

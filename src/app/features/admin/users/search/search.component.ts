@@ -78,10 +78,14 @@ export class SearchUsersComponent {
     this.formCollapsed = !this.formCollapsed;
   }
 
-  goToPage(pageNumber: number): void {
-    this.searchForm.get('pageNumber')?.setValue(pageNumber);
+  goToPage(event: { pageNumber: number; pageSize: number }): void {
+    this.searchForm.patchValue({
+      pageNumber: event.pageNumber,
+      resultsPerPage: event.pageSize
+    });
     this.onSubmit();
   }
+  
 
   onResultsPerPageChange(): void {
     this.searchForm.get('pageNumber')?.setValue(1);

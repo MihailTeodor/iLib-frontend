@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ArticlesService } from '../../../features/articles/articles.service';
 import { ArticleDTO } from '../../../shared/models/article.dto';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,12 +14,9 @@ export class SearchArticlesComponent implements OnInit {
   searchForm: FormGroup;
   articles: ArticleDTO[] = [];
   totalResults: number = 0;
-  totalPages: number = 1;
   currentPage: number = 1;
   formCollapsed: boolean = false;
   resultsPerPageOptions = [5, 10, 15, 20];
-
-  displayedColumns: string[] = ['title', 'author'];
 
   constructor(
     private fb: FormBuilder,
@@ -48,7 +44,8 @@ export class SearchArticlesComponent implements OnInit {
     if (history.state.searchFormData && history.state.articles) {
       this.searchForm.patchValue(history.state.searchFormData);
       this.articles = history.state.articles;
-      this.totalResults = this.articles.length;
+      this.totalResults = history.state.totalResults || this.articles.length;
+      this.currentPage = history.state.currentPage || 1;
       this.formCollapsed = this.totalResults > 0;
     }
   }
@@ -58,7 +55,6 @@ export class SearchArticlesComponent implements OnInit {
       next: (response) => {
         this.articles = response.items;
         this.totalResults = response.totalResults;
-        this.totalPages = response.totalPages;
         this.currentPage = response.pageNumber;
         this.formCollapsed = true;
       },
@@ -89,19 +85,20 @@ export class SearchArticlesComponent implements OnInit {
     this.formCollapsed = !this.formCollapsed;
   }
 
-  goToPage(pageNumber: number): void {
-    this.searchForm.get('pageNumber')?.setValue(pageNumber);
+  goToPage(event: { pageNumber: number; pageSize: number }): void {
+    this.searchForm.patchValue({
+      pageNumber: event.pageNumber,
+      resultsPerPage: event.pageSize
+    });
     this.onSubmit();
   }
+  
 
   onResultsPerPageChange(): void {
-    this.searchForm.get('pageNumber')?.setValue(1);
+    this.searchForm.patchValue({
+      pageNumber: 1
+    });
     this.onSubmit();
   }
-
-  onPageChange(event: PageEvent): void {
-    this.searchForm.get('pageNumber')?.setValue(event.pageIndex + 1);
-    this.searchForm.get('resultsPerPage')?.setValue(event.pageSize);
-    this.onSubmit();
-  }
+  
 }

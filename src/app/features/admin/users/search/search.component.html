@@ -53,7 +53,8 @@
     [users]="users"
     [totalResults]="totalResults"
     [totalPages]="totalPages"
-    [currentPage]="currentPage"
+    [currentPage]="searchForm.get('pageNumber')?.value"
+    [pageSize]="searchForm.get('resultsPerPage')?.value"
     [searchFormData]="searchForm.value"
     (pageChange)="goToPage($event)">
   </app-user-list>

@@ -14,29 +14,36 @@ import { MatSort } from '@angular/material/sort';
 export class ArticleListComponent implements OnChanges, AfterViewInit {
   @Input() articles: ArticleDTO[] = [];
   @Input() totalResults: number = 0;
-  @Input() totalPages: number = 1;
   @Input() currentPage: number = 1;
   @Input() searchFormData: any = {};
+  @Input() pageSize: number = 10;
 
-  @Output() pageChange: EventEmitter<number> = new EventEmitter<number>();
+  @Output() pageChange: EventEmitter<{ pageNumber: number; pageSize: number }> = new EventEmitter();
 
-  displayedColumns: string[] = ['title', 'author', 'publisher', 'year', 'type', 'location', 'state', 'actions'];
+  displayedColumns: string[] = ['title', 'publisher', 'year', 'type', 'location', 'state', 'actions'];
   dataSource = new MatTableDataSource<ArticleDTO>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  pageSize = 10;
+
   pageSizeOptions = [5, 10, 15, 20];
 
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnChanges(): void {
     this.dataSource.data = this.articles;
+      
     if (this.paginator) {
       this.paginator.pageIndex = this.currentPage - 1;
-      this.paginator.length = this.totalResults;
-      this.paginator.pageSize = this.pageSize;
+  
+      setTimeout(() => {
+        this.paginator.length = this.totalResults;
+        this.paginator.pageSize = this.pageSize;
+        this.paginator.pageIndex = this.currentPage - 1;
+
+        
+      });
     }
   }
 
@@ -64,7 +71,10 @@ export class ArticleListComponent implements OnChanges, AfterViewInit {
   }
 
   onPageChange(event: PageEvent): void {
-    this.pageSize = event.pageSize;
-    this.pageChange.emit(event.pageIndex + 1);
+    this.pageChange.emit({
+      pageNumber: event.pageIndex + 1,
+      pageSize: event.pageSize
+    });
   }
+  
 }
